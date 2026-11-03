@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { authService } from '../services/api';
-import { BrainCircuit, Lock, User, ArrowRight, ShieldCheck } from 'lucide-react';
+import { BrainCircuit, Lock, User, ArrowRight, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 interface LoginProps {
   onLoginSuccess: (user: any) => void;
 }
 
 export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  const { isDark, toggleTheme } = useTheme();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -51,7 +53,18 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center p-4 relative">
+      {/* Theme Switcher Top-Right */}
+      <div className="absolute top-5 right-5">
+        <button
+          onClick={toggleTheme}
+          title={isDark ? "Yorug' rejim" : "Tungi rejim"}
+          className="p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 backdrop-blur transition shadow-sm"
+        >
+          {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-300" />}
+        </button>
+      </div>
+
       <div className="max-w-md w-full">
         {/* Logo & Headline */}
         <div className="text-center mb-8">
