@@ -38,3 +38,4 @@ Write-Host "  - AI RAG:   http://localhost:8001"
 Write-Host "`n  HR Admin: admin / admin123"
 Write-Host "  Xodim:    xodim / xodim123"
 Write-Host "======================================================================" -ForegroundColor Cyan
+

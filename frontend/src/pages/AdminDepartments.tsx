@@ -36,7 +36,6 @@ export const AdminDepartments: React.FC = () => {
     username: '',
     password: '',
     full_name: '',
-    level: 'Middle',
   });
 
   useEffect(() => {
@@ -134,7 +133,6 @@ export const AdminDepartments: React.FC = () => {
       username: '',
       password: '',
       full_name: '',
-      level: 'Middle',
     });
     setEmpModalOpen(true);
   };
@@ -146,7 +144,6 @@ export const AdminDepartments: React.FC = () => {
       username: emp.username,
       password: '',
       full_name: emp.full_name,
-      level: emp.level || 'Middle',
     });
     setEmpModalOpen(true);
   };
@@ -522,11 +519,8 @@ export const AdminDepartments: React.FC = () => {
                         {emp.full_name?.slice(0, 2).toUpperCase() || 'XO'}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                          <span>{emp.full_name}</span>
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
-                            {emp.level || 'Middle'}
-                          </span>
+                        <div className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                          {emp.full_name}
                         </div>
                         <div className="text-xs text-gray-400 dark:text-gray-500 font-mono mt-0.5">
                           Login: <span className="text-gray-600 dark:text-gray-300 font-semibold">{emp.username}</span>
@@ -634,20 +628,7 @@ export const AdminDepartments: React.FC = () => {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
-                  Daraja (Level)
-                </label>
-                <select
-                  value={empFormData.level}
-                  onChange={(e) => setEmpFormData({ ...empFormData, level: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm outline-none"
-                >
-                  <option value="Junior">Junior</option>
-                  <option value="Middle">Middle</option>
-                  <option value="Senior">Senior</option>
-                </select>
-              </div>
+
 
               <div className="flex justify-end gap-2 pt-3">
                 <button

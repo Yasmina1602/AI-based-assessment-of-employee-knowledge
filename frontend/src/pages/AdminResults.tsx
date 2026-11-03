@@ -476,7 +476,7 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
                           </span>
                         ) : r.status === 'cancelled_cheat' ? (
                           <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 font-bold border border-red-200 dark:border-red-800/60">
-                            <AlertTriangle className="w-3.5 h-3.5" /> Anti-cheat bekor
+                            <AlertTriangle className="w-3.5 h-3.5" /> Qoidabuzarlik
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 font-bold border border-rose-200 dark:border-rose-800/60">
@@ -608,20 +608,19 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-slate-800 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-slate-50/50 dark:bg-slate-800/40">
-                    <th className="py-3.5 px-5">Reyting</th>
+                    <th className="py-3.5 px-5">O'rin</th>
                     <th className="py-3.5 px-5">Xodim</th>
                     <th className="py-3.5 px-5">Bo'lim</th>
-                    <th className="py-3.5 px-5">Daraja</th>
-                    <th className="py-3.5 px-5">Topshirilgan</th>
+                    <th className="py-3.5 px-5">Topshirilgan Testlar</th>
                     <th className="py-3.5 px-5">O'rtacha Ball</th>
                     <th className="py-3.5 px-5">Eng Yuqori Ball</th>
-                    <th className="py-3.5 px-5">Halollik</th>
+                    <th className="py-3.5 px-5">Qoidabuzarlik</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50 dark:divide-slate-800/60">
                   {leaderboard.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-12 text-center text-gray-400">
+                      <td colSpan={7} className="py-12 text-center text-gray-400">
                         Xodimlar ma'lumotlari topilmadi
                       </td>
                     </tr>
@@ -630,20 +629,20 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
                       <tr key={u.user_id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
                         <td className="py-4 px-5">
                           {idx === 0 ? (
-                            <span className="w-7 h-7 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 font-extrabold text-xs flex items-center justify-center">
-                              🥇 1
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 font-extrabold text-xs">
+                              🥇 1-o'rin
                             </span>
                           ) : idx === 1 ? (
-                            <span className="w-7 h-7 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs flex items-center justify-center">
-                              🥈 2
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs">
+                              🥈 2-o'rin
                             </span>
                           ) : idx === 2 ? (
-                            <span className="w-7 h-7 rounded-xl bg-amber-200/70 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 font-extrabold text-xs flex items-center justify-center">
-                              🥉 3
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-200/70 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 font-extrabold text-xs">
+                              🥉 3-o'rin
                             </span>
                           ) : (
-                            <span className="w-7 h-7 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 font-bold text-xs flex items-center justify-center">
-                              {idx + 1}
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 font-bold text-xs">
+                              {idx + 1}-o'rin
                             </span>
                           )}
                         </td>
@@ -653,11 +652,6 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
                         </td>
                         <td className="py-4 px-5 text-gray-600 dark:text-gray-300 text-xs">
                           {u.department_name || '-'}
-                        </td>
-                        <td className="py-4 px-5">
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
-                            {u.level || 'Middle'}
-                          </span>
                         </td>
                         <td className="py-4 px-5 text-xs text-gray-600 dark:text-gray-300">
                           <b>{u.total_tests_taken} ta</b> ({u.passed_tests_count} o'tdi)

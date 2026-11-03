@@ -245,6 +245,14 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
               </>
             )}
           </button>
+
+          <button
+            type="button"
+            onClick={() => onViewResults(0)}
+            className="w-full py-3 mt-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-2xl transition flex items-center justify-center gap-2 text-sm"
+          >
+            <span>Avvalgi topshirilgan testlar va natijalarni ko'rish</span>
+          </button>
         </div>
       </div>
     );
@@ -261,6 +269,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
       warningsCount={session.cheat_warnings_count || 0}
       onCheatDetected={handleAntiCheatDetected}
       isTestActive={session.status === 'in_progress'}
+      onTerminated={() => onViewResults(session.session_id)}
     >
       <div className="max-w-5xl mx-auto space-y-4 py-4">
         {/* Top Sticky Bar: Department, Question Nav & Timer */}
@@ -303,9 +312,6 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
                     : 'bg-purple-50 text-purple-700 border border-purple-200'
                 }`}>
                   {currentQ.question_type === 'closed' ? "Yopiq savol (1 ta to'g'ri javob)" : 'Ochiq savol (Matnli javob)'}
-                </span>
-                <span className="text-xs text-gray-400 font-medium">
-                  Daraja: {currentQ.level || 'Middle'}
                 </span>
               </div>
 

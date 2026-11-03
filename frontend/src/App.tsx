@@ -71,7 +71,9 @@ export const App: React.FC = () => {
             {currentTab === 'employee-test' && (
               <EmployeeTest user={user} onViewResults={handleViewResultDetail} />
             )}
-            {currentTab === 'employee-results' && <EmployeeResults />}
+            {currentTab === 'employee-results' && (
+              <EmployeeResults initialSessionId={selectedResultId} />
+            )}
           </>
         )}
       </main>

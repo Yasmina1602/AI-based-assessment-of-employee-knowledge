@@ -112,7 +112,8 @@ CREATE TABLE IF NOT EXISTS anti_cheat_logs (
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     event_type VARCHAR(50) NOT NULL, -- 'tab_hidden', 'window_blur', 'copy_attempt', 'paste_attempt', 'devtools_key', 'fullscreen_exit'
     details JSONB DEFAULT '{}'::jsonb,
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Indekslar

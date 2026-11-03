@@ -88,7 +88,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onViewResults })
             <ShieldAlert className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-gray-500 font-medium">Anti-Cheat Bekorlar</span>
+            <span className="text-xs text-gray-500 font-medium">Qoidabuzarliklar</span>
             <div className="text-2xl font-bold text-amber-600">{stats.cheat_cancelled_tests || 0}</div>
           </div>
         </div>
@@ -166,7 +166,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onViewResults })
                         </span>
                       ) : test.status === 'cancelled_cheat' ? (
                         <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-red-50 text-red-700 font-semibold border border-red-200">
-                          <AlertTriangle className="w-3.5 h-3.5" /> Anti-cheat bekor
+                          <AlertTriangle className="w-3.5 h-3.5" /> Qoidabuzarlik
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 font-semibold border border-rose-200">

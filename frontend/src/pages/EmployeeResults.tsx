@@ -5,16 +5,26 @@ import {
   ArrowLeft, BrainCircuit, ShieldAlert, Award, Star, Clock 
 } from 'lucide-react';
 
-export const EmployeeResults: React.FC = () => {
+interface EmployeeResultsProps {
+  initialSessionId?: number | null;
+}
+
+export const EmployeeResults: React.FC<EmployeeResultsProps> = ({ initialSessionId }) => {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeSessionId, setActiveSessionId] = useState<number | null>(null);
+  const [activeSessionId, setActiveSessionId] = useState<number | null>(initialSessionId || null);
   const [sessionDetail, setSessionDetail] = useState<any>(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
   useEffect(() => {
     loadMyResults();
   }, []);
+
+  useEffect(() => {
+    if (initialSessionId) {
+      setActiveSessionId(initialSessionId);
+    }
+  }, [initialSessionId]);
 
   useEffect(() => {
     if (activeSessionId) {
@@ -260,20 +270,35 @@ export const EmployeeResults: React.FC = () => {
     );
   }
 
+  if (detailLoading) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 text-center">
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">Test natijalari va tahlillari yuklanmoqda...</h3>
+        <p className="text-xs text-gray-400 mt-1">Iltimos, kuting...</p>
+      </div>
+    );
+  }
+
   // List View
   return (
     <div className="max-w-4xl mx-auto space-y-6 py-4">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Mening Natijalarim</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mening Natijalarim</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
           Avval topshirgan barcha testlaringiz va AI tomonidan berilgan baholar
         </p>
       </div>
 
       <div className="space-y-3">
-        {results.length === 0 ? (
-          <div className="bg-white p-12 text-center text-gray-400 rounded-2xl border border-gray-100">
-            <Award className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+        {loading ? (
+          <div className="bg-white dark:bg-slate-900 p-12 text-center text-gray-400 dark:text-gray-500 rounded-2xl border border-gray-100 dark:border-slate-800">
+            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <p className="text-xs">Yuklanmoqda...</p>
+          </div>
+        ) : results.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900 p-12 text-center text-gray-400 dark:text-gray-500 rounded-2xl border border-gray-100 dark:border-slate-800">
+            <Award className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-2" />
             <p className="text-sm">Siz hali test topshirmagansiz.</p>
           </div>
         ) : (
@@ -281,34 +306,38 @@ export const EmployeeResults: React.FC = () => {
             <div
               key={r.id}
               onClick={() => setActiveSessionId(r.id)}
-              className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition cursor-pointer flex items-center justify-between gap-4"
+              className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-900/60 transition cursor-pointer flex items-center justify-between gap-4"
             >
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/40">
                     {r.department_name}
                   </span>
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                  <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {new Date(r.completed_at || r.started_at).toLocaleDateString('uz-UZ')}
                   </span>
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 dark:text-gray-300">
                   Ball: <b>{r.closed_score} yopiq + {r.open_score} ochiq</b>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <span className="text-2xl font-black text-gray-900 block">{r.percentage}%</span>
+                  <span className="text-2xl font-black text-gray-900 dark:text-white block">{r.percentage}%</span>
                   <span className={`text-[11px] font-bold ${
-                    r.is_passed ? 'text-emerald-600' : 'text-rose-600'
+                    r.status === 'cancelled_cheat' 
+                      ? 'text-rose-600 dark:text-rose-400' 
+                      : r.is_passed 
+                        ? 'text-emerald-600 dark:text-emerald-400' 
+                        : 'text-rose-600 dark:text-rose-400'
                   }`}>
-                    {r.is_passed ? "Muvaffaqiyatli" : "O'ta olmadi"}
+                    {r.status === 'cancelled_cheat' ? 'Qoidabuzarlik tufayli bekor' : r.is_passed ? "Muvaffaqiyatli" : "O'ta olmadi"}
                   </span>
                 </div>
 
-                <div className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                   <BarChart3 className="w-4 h-4" />
                 </div>
               </div>

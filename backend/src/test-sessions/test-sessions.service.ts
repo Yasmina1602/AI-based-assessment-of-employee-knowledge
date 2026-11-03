@@ -452,10 +452,10 @@ export class TestSessionsService {
 
     // Fetch anti-cheat logs for this session
     const logsRes = await this.db.query(
-      `SELECT id, event_type, details, created_at
+      `SELECT id, event_type, details, COALESCE(created_at, timestamp, NOW()) as created_at
        FROM anti_cheat_logs
        WHERE session_id = $1
-       ORDER BY created_at ASC`,
+       ORDER BY COALESCE(created_at, timestamp, NOW()) ASC`,
       [sessionId]
     );
 
