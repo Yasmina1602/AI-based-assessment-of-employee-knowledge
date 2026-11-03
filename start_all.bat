@@ -8,7 +8,8 @@ echo ======================================================================
 echo.
 
 echo [1/4] Band bo'lgan portlarni tozalash (3000, 4000, 8001)...
-powershell -NoProfile -Command "Get-NetTCPConnection -LocalPort 3000,4000,8001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }" >nul 2>&1
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":3000 :4000 :8001" ^| findstr "LISTENING"') do taskkill /f /pid %%a >nul 2>&1
+powershell -NoProfile -Command "Get-NetTCPConnection -LocalPort 3000,4000,8001 -ErrorAction SilentlyContinue | Where-Object { $_.OwningProcess -gt 0 } | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }" >nul 2>&1
 
 echo [2/4] Python AI mikroservisini ishga tushirish (port: 8001)...
 if exist "ai-service\.venv\Scripts\python.exe" (

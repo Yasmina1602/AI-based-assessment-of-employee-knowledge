@@ -8,9 +8,9 @@ export class DepartmentsService {
   async findAll() {
     const res = await this.db.query(`
       SELECT d.*, 
-        (SELECT COUNT(*) FROM questions q WHERE q.department_id = d.id AND q.status = 'approved') as approved_questions_count,
-        (SELECT COUNT(*) FROM documents doc WHERE doc.department_id = d.id) as documents_count,
-        (SELECT COUNT(*) FROM users u WHERE u.department_id = d.id AND u.role = 'xodim') as employees_count
+        CAST((SELECT COUNT(*) FROM questions q WHERE q.department_id = d.id AND q.status = 'approved') AS INTEGER) as approved_questions_count,
+        CAST((SELECT COUNT(*) FROM documents doc WHERE doc.department_id = d.id) AS INTEGER) as documents_count,
+        CAST((SELECT COUNT(*) FROM users u WHERE u.department_id = d.id AND u.role = 'xodim') AS INTEGER) as employees_count
       FROM departments d
       ORDER BY d.id ASC
     `);

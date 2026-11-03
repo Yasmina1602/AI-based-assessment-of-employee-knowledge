@@ -118,9 +118,10 @@ export const AdminDepartments: React.FC = () => {
     try {
       setDeptEmployeesLoading(true);
       const res = await authService.getDepartmentEmployees(deptId);
-      setDeptEmployees(res);
-    } catch (e) {
+      setDeptEmployees(Array.isArray(res) ? res : []);
+    } catch (e: any) {
       console.error(e);
+      alert(e.response?.data?.message || "Xodimlarni yuklashda xatolik yuz berdi. Backend ishlab turganini tekshiring.");
     } finally {
       setDeptEmployeesLoading(false);
     }
