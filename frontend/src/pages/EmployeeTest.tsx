@@ -186,30 +186,30 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
 
     return (
       <div className="max-w-3xl mx-auto space-y-6 py-6">
-        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-5">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-gray-100 dark:border-slate-800 shadow-xl">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-5">
             <ShieldCheck className="w-8 h-8" />
           </div>
 
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-2">
+          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2">
             Bilim va Ko'nikmalarni Baholash Testi
           </h1>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-slate-300 text-sm mb-6">
             Ushbu test korxonaning tasdiqlangan ichki reglament va me'yoriy hujjatlari asosida sun'iy intellekt tomonidan tuzilgan.
           </p>
 
           {/* Department Selector */}
           <div className="mb-6">
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-gray-700 dark:text-slate-300 uppercase tracking-wider mb-2">
               Test Yo'nalishini (Bo'limni) tanlang:
             </label>
             <select
               value={selectedDeptId}
               onChange={(e) => setSelectedDeptId(Number(e.target.value))}
-              className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold text-gray-900 outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-3.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm font-semibold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {departments.map((d) => (
-                <option key={d.id} value={d.id}>
+                <option key={d.id} value={d.id} className="dark:bg-slate-800 text-gray-900 dark:text-white">
                   {d.name} ({d.test_duration_minutes || 30} daqiqa, {d.total_questions || 30} ta savol)
                 </option>
               ))}
@@ -217,9 +217,9 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
           </div>
 
           {/* Instructions Box */}
-          <div className="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 mb-6 space-y-3 text-xs text-indigo-950">
-            <h4 className="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
+          <div className="bg-indigo-50/60 dark:bg-indigo-950/40 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-900/60 mb-6 space-y-3 text-xs text-indigo-950 dark:text-indigo-200">
+            <h4 className="font-bold text-sm text-indigo-900 dark:text-indigo-300 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>Test Qoidalari va Shartlari</span>
             </h4>
             <ul className="space-y-1.5 list-disc list-inside">
@@ -234,7 +234,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
           <button
             onClick={handleStartTest}
             disabled={loading || departments.length === 0}
-            className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition shadow-xl shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-50 text-base"
+            className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition shadow-xl shadow-indigo-200 dark:shadow-none flex items-center justify-center gap-2 disabled:opacity-50 text-base"
           >
             {loading ? (
               <span>Test tayyorlanmoqda...</span>
@@ -273,10 +273,10 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
     >
       <div className="max-w-5xl mx-auto space-y-4 py-4">
         {/* Top Sticky Bar: Department, Question Nav & Timer */}
-        <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between gap-4 sticky top-16 z-20">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm flex items-center justify-between gap-4 sticky top-16 z-20">
           <div>
-            <span className="text-xs text-gray-400 font-medium">{session.department_name}</span>
-            <div className="text-sm font-bold text-gray-900">
+            <span className="text-xs text-gray-400 dark:text-slate-400 font-medium">{session.department_name}</span>
+            <div className="text-sm font-bold text-gray-900 dark:text-white">
               Savol: {currentIdx + 1} / {questions.length}
             </div>
           </div>
@@ -284,8 +284,8 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
           {/* Countdown Timer */}
           <div className={`px-4 py-2 rounded-xl flex items-center gap-2 font-mono font-bold text-base shadow-sm border ${
             isTimeUrgent 
-              ? 'bg-rose-50 text-rose-600 border-rose-200 animate-pulse' 
-              : 'bg-indigo-50 text-indigo-700 border-indigo-100'
+              ? 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-900 animate-pulse' 
+              : 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-900'
           }`}>
             <Clock className="w-4 h-4" />
             <span>{formatTime(remainingSec)}</span>
@@ -293,7 +293,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
 
           <button
             onClick={handleManualSubmit}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-100 flex items-center gap-1.5"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-100 dark:shadow-none flex items-center gap-1.5"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Yakunlash</span>
@@ -303,19 +303,19 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
         {/* Question Content & Navigation Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main Question Card */}
-          <div className="lg:col-span-3 bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-between min-h-[460px]">
+          <div className="lg:col-span-3 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm flex flex-col justify-between min-h-[460px]">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                   currentQ.question_type === 'closed'
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                    : 'bg-purple-50 text-purple-700 border border-purple-200'
+                    ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900'
+                    : 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900'
                 }`}>
                   {currentQ.question_type === 'closed' ? "Yopiq savol (1 ta to'g'ri javob)" : 'Ochiq savol (Matnli javob)'}
                 </span>
               </div>
 
-              <h2 className="text-base sm:text-lg font-bold text-gray-900 leading-relaxed mb-6">
+              <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white leading-relaxed mb-6">
                 {currentQ.question_text}
               </h2>
 
@@ -351,7 +351,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
               {/* Open Question Textarea */}
               {currentQ.question_type === 'open' && (
                 <div className="space-y-2">
-                  <label className="block text-xs font-semibold text-gray-500">
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400">
                     Javobingizni me'yoriy qoidalar va ichki reglamentga asoslangan holda to'liq yozing:
                   </label>
                   <textarea
@@ -360,9 +360,9 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
                     onChange={(e) => handleTextAnswerChange(e.target.value)}
                     onBlur={handleTextAnswerBlur}
                     placeholder="Bu yerga batafsil javobingizni yozing..."
-                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none leading-relaxed"
+                    className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-indigo-500 outline-none leading-relaxed"
                   />
-                  <div className="flex justify-between text-[11px] text-gray-400">
+                  <div className="flex justify-between text-[11px] text-gray-400 dark:text-slate-400">
                     <span>Avtomatik saqlanadi</span>
                     <span>{(currentQ.saved_answer_text || '').length} belgi</span>
                   </div>
@@ -371,11 +371,11 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
             </div>
 
             {/* Bottom Next/Prev buttons */}
-            <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-6">
+            <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-slate-800 mt-6">
               <button
                 disabled={currentIdx === 0}
                 onClick={() => setCurrentIdx(currentIdx - 1)}
-                className="px-4 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition flex items-center gap-1.5 disabled:opacity-30"
+                className="px-4 py-2.5 text-xs font-bold text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition flex items-center gap-1.5 disabled:opacity-30"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Oldingisi</span>
@@ -384,7 +384,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
               <button
                 disabled={currentIdx === questions.length - 1}
                 onClick={() => setCurrentIdx(currentIdx + 1)}
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-md shadow-indigo-100 disabled:opacity-30"
+                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-md shadow-indigo-100 dark:shadow-none disabled:opacity-30"
               >
                 <span>Keyingisi</span>
                 <ArrowRight className="w-4 h-4" />
@@ -393,8 +393,8 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
           </div>
 
           {/* Right Question Palette */}
-          <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm h-fit">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm h-fit">
+            <h3 className="text-xs font-bold text-gray-400 dark:text-slate-400 uppercase tracking-wider mb-3">
               Savollar Xaritasi
             </h3>
 
@@ -403,9 +403,9 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
                 const isAnswered = q.saved_selected_option_id || (q.saved_answer_text && q.saved_answer_text.trim().length > 0);
                 const isCurrent = currentIdx === idx;
 
-                let btnStyle = 'bg-gray-50 text-gray-600 border-gray-200';
-                if (isAnswered) btnStyle = 'bg-emerald-50 text-emerald-700 border-emerald-300 font-bold';
-                if (isCurrent) btnStyle += ' ring-2 ring-indigo-600 font-extrabold';
+                let btnStyle = 'bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-slate-300 border-gray-200 dark:border-slate-700';
+                if (isAnswered) btnStyle = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 font-bold';
+                if (isCurrent) btnStyle += ' ring-2 ring-indigo-600 dark:ring-indigo-400 font-extrabold';
 
                 return (
                   <button
@@ -419,13 +419,13 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
               })}
             </div>
 
-            <div className="mt-5 pt-4 border-t border-gray-100 space-y-2 text-[11px] text-gray-500">
+            <div className="mt-5 pt-4 border-t border-gray-100 dark:border-slate-800 space-y-2 text-[11px] text-gray-500 dark:text-slate-400">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded bg-emerald-500" />
                 <span>Javob berilgan</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-gray-200" />
+                <div className="w-3 h-3 rounded bg-gray-200 dark:bg-slate-700" />
                 <span>Belgilanmagan</span>
               </div>
               <div className="flex items-center gap-2">

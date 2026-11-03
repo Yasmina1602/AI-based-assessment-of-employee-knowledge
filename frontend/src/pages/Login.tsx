@@ -178,6 +178,26 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                 <span>Xodim</span>
               </button>
             </div>
+
+            {/* Credentials hint */}
+            <div className="mt-4 p-3 rounded-2xl bg-slate-800/50 border border-slate-700/60 text-xs text-slate-300 space-y-1.5">
+              <div className="font-bold text-slate-200 flex items-center justify-between">
+                <span>Standart kirish parollari:</span>
+                <span className="text-[10px] text-slate-400">(Tugmani bosing)</span>
+              </div>
+              <div className="flex justify-between items-center text-[11px]">
+                <span className="text-purple-300 font-semibold">👑 Superadmin:</span>
+                <span className="font-mono text-purple-200 bg-slate-900/60 px-2 py-0.5 rounded">superadmin / admin123</span>
+              </div>
+              <div className="flex justify-between items-center text-[11px]">
+                <span className="text-indigo-300 font-semibold">🛡️ HR Admin:</span>
+                <span className="font-mono text-indigo-200 bg-slate-900/60 px-2 py-0.5 rounded">admin / admin123</span>
+              </div>
+              <div className="flex justify-between items-center text-[11px]">
+                <span className="text-emerald-300 font-semibold">👤 Xodim:</span>
+                <span className="font-mono text-emerald-200 bg-slate-900/60 px-2 py-0.5 rounded">xodim / xodim123</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
