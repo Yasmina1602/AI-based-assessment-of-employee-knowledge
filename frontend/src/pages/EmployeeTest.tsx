@@ -183,6 +183,8 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
   // Pre-test Screen
   if (!session) {
     const currentDept = departments.find((d) => d.id === selectedDeptId);
+    const approvedQuestions = Number(currentDept?.approved_questions_count ?? 0);
+    const hasQuestions = approvedQuestions > 0;
 
     return (
       <div className="max-w-3xl mx-auto space-y-6 py-6">
@@ -210,7 +212,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
             >
               {departments.map((d) => (
                 <option key={d.id} value={d.id} className="dark:bg-slate-800 text-gray-900 dark:text-white">
-                  {d.name} ({d.test_duration_minutes || 30} daqiqa, {d.total_questions || 30} ta savol)
+                  {d.name} ({d.test_duration_minutes || 30} daqiqa, {d.approved_questions_count || 0} ta tayyor savol)
                 </option>
               ))}
             </select>
@@ -224,20 +226,31 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
             </h4>
             <ul className="space-y-1.5 list-disc list-inside">
               <li>Test davomiyligi: <b>{currentDept?.test_duration_minutes || 30} daqiqa</b>.</li>
-              <li>Test tarkibi: <b>{currentDept?.closed_questions_count || 25} ta yopiq</b> va <b>{currentDept?.open_questions_count || 5} ta ochiq</b> savol.</li>
+              <li>Test tarkibi: <b>{Math.min(currentDept?.closed_questions_count || 25, approvedQuestions)} ta yopiq</b> va <b>ochiq</b> savollar.</li>
               <li>O'tish bali: <b>{currentDept?.passing_score || 60}%</b>.</li>
-              <li><b>Anti-Cheat Nazorati:</b> Brauzer oynasini tark etish, tab almashish, matnni nusxalash taqiqlanadi (3 ta ogohlantirishdan so'ng test bekor qilinadi).</li>
+              <li><b>Anti-Cheat Nazorati:</b> Brauzer oynasini tark etish, tab almashish, matnni nusxalash taqiqlanadi (har bir holatda ogohlantirish beriladi, 3 martadan so'ng test bekor qilinadi).</li>
               <li>Javoblaringiz avtomatik saqlanib boradi. Internet uzilsa ham vaqt serverda to'xtamaydi.</li>
             </ul>
           </div>
 
+          {!hasQuestions && (
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-2xl text-xs text-amber-900 dark:text-amber-200 flex items-center gap-2.5 mb-6">
+              <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>
+                Ushbu bo'lim uchun hali tasdiqlangan test savollari shakllantirilmagan. HR administrator yangi reglament hujjat yuklab, uni AIga o'rgatishi kerak.
+              </span>
+            </div>
+          )}
+
           <button
             onClick={handleStartTest}
-            disabled={loading || departments.length === 0}
+            disabled={loading || departments.length === 0 || !hasQuestions}
             className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition shadow-xl shadow-indigo-200 dark:shadow-none flex items-center justify-center gap-2 disabled:opacity-50 text-base"
           >
             {loading ? (
               <span>Test tayyorlanmoqda...</span>
+            ) : !hasQuestions ? (
+              <span>Ushbu bo'limda savollar mavjud emas</span>
             ) : (
               <>
                 <span>Testni Boshlash</span>

@@ -15,7 +15,7 @@ export class DocumentsService {
   async findAll(departmentId?: number) {
     let query = `
       SELECT doc.*, d.name as department_name,
-        (SELECT COUNT(*) FROM questions q WHERE q.document_id = doc.id) as generated_questions_count
+        CAST((SELECT COUNT(*) FROM questions q WHERE q.document_id = doc.id) AS INTEGER) as generated_questions_count
       FROM documents doc
       LEFT JOIN departments d ON doc.department_id = d.id
     `;
