@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { authService } from '../services/api';
-import { BrainCircuit, Lock, User, ArrowRight, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { BrainCircuit, Lock, User, ArrowRight, ShieldCheck, Sun, Moon, Crown } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface LoginProps {
@@ -150,22 +150,31 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               Tezkor kirish (Demo hisoblar)
             </span>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('superadmin', 'admin123')}
+                className="py-2.5 px-2 bg-slate-50 dark:bg-slate-800/60 hover:bg-purple-50 dark:hover:bg-purple-950/60 text-slate-700 dark:text-slate-300 hover:text-purple-700 dark:hover:text-purple-300 border border-slate-200 dark:border-slate-700 hover:border-purple-300 rounded-xl text-xs font-bold transition text-center flex flex-col items-center gap-1"
+              >
+                <Crown className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <span>Superadmin</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => handleQuickLogin('admin', 'admin123')}
-                className="py-2.5 px-3 bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-semibold transition text-center flex flex-col items-center gap-1"
+                className="py-2.5 px-2 bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/60 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 rounded-xl text-xs font-semibold transition text-center flex flex-col items-center gap-1"
               >
-                <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>HR Admin</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickLogin('xodim', 'xodim123')}
-                className="py-2.5 px-3 bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-semibold transition text-center flex flex-col items-center gap-1"
+                className="py-2.5 px-2 bg-slate-50 dark:bg-slate-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200 dark:border-slate-700 hover:border-emerald-300 rounded-xl text-xs font-semibold transition text-center flex flex-col items-center gap-1"
               >
-                <User className="w-4 h-4 text-emerald-600" />
+                <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Xodim</span>
               </button>
             </div>

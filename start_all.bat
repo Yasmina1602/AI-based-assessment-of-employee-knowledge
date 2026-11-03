@@ -45,8 +45,9 @@ echo   * Backend  (NestJS):   http://localhost:4000
 echo   * AI RAG   (FastAPI):  http://localhost:8001
 echo.
 echo   Standart loginlar:
-echo   - HR Admin:  admin  / admin123
-echo   - Xodim:     xodim  / xodim123
+echo   - Super Admin: superadmin / admin123
+echo   - HR Admin:    admin      / admin123
+echo   - Xodim:       xodim      / xodim123
 echo.
 echo   Eslatma: Servislarni to'xtatish uchun ochilgan terminal oynalarini yoping.
 echo ======================================================================

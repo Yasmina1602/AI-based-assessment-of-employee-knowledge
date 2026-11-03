@@ -1,6 +1,15 @@
 -- EMPLOYEE ASSESSMENT SYSTEM DATABASE SCHEMA
 
--- 1. Bo'limlar (Departments)
+-- 1. Rollar (Roles: superadmin, admin, xodim)
+CREATE TABLE IF NOT EXISTS roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL, -- 'superadmin', 'admin', 'xodim'
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Bo'limlar (Departments)
 CREATE TABLE IF NOT EXISTS departments (
     id SERIAL PRIMARY KEY,
     name VARCHAR(150) UNIQUE NOT NULL,
@@ -13,15 +22,15 @@ CREATE TABLE IF NOT EXISTS departments (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Foydalanuvchilar (Users: Admin & Xodim)
+-- 3. Foydalanuvchilar (Users: superadmin, admin, xodim)
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'xodim', -- 'admin' yoki 'xodim'
+    role VARCHAR(50) NOT NULL DEFAULT 'xodim', -- 'superadmin', 'admin', 'xodim'
+    role_id INT REFERENCES roles(id) ON DELETE SET NULL,
     department_id INT REFERENCES departments(id) ON DELETE SET NULL,
-    level VARCHAR(20) DEFAULT 'Middle', -- 'Junior', 'Middle', 'Senior'
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

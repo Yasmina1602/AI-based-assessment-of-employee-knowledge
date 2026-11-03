@@ -7,6 +7,7 @@ import { AdminDepartments } from './pages/AdminDepartments';
 import { AdminDocuments } from './pages/AdminDocuments';
 import { AdminQuestions } from './pages/AdminQuestions';
 import { AdminResults } from './pages/AdminResults';
+import { AdminAdmins } from './pages/AdminAdmins';
 import { EmployeeTest } from './pages/EmployeeTest';
 import { EmployeeResults } from './pages/EmployeeResults';
 
@@ -15,11 +16,14 @@ export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>('dashboard');
   const [selectedResultId, setSelectedResultId] = useState<number | null>(null);
 
+  const isSuperAdmin = user?.role === 'superadmin';
+  const isAdmin = user?.role === 'admin' || isSuperAdmin;
+
   useEffect(() => {
     const savedUser = authService.getCurrentUser();
     if (savedUser) {
       setUser(savedUser);
-      if (savedUser.role === 'admin') {
+      if (savedUser.role === 'admin' || savedUser.role === 'superadmin') {
         setCurrentTab('dashboard');
       } else {
         setCurrentTab('employee-test');
@@ -29,7 +33,7 @@ export const App: React.FC = () => {
 
   const handleLoginSuccess = (loggedInUser: any) => {
     setUser(loggedInUser);
-    if (loggedInUser.role === 'admin') {
+    if (loggedInUser.role === 'admin' || loggedInUser.role === 'superadmin') {
       setCurrentTab('dashboard');
     } else {
       setCurrentTab('employee-test');
@@ -38,7 +42,7 @@ export const App: React.FC = () => {
 
   const handleViewResultDetail = (sessionId: number) => {
     setSelectedResultId(sessionId);
-    if (user?.role === 'admin') {
+    if (isAdmin) {
       setCurrentTab('results');
     } else {
       setCurrentTab('employee-results');
@@ -54,7 +58,7 @@ export const App: React.FC = () => {
       <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} user={user} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {user.role === 'admin' ? (
+        {isAdmin ? (
           <>
             {currentTab === 'dashboard' && (
               <AdminDashboard onViewResults={handleViewResultDetail} />
@@ -65,6 +69,8 @@ export const App: React.FC = () => {
             {currentTab === 'results' && (
               <AdminResults initialSessionId={selectedResultId} />
             )}
+            {/* Superadmin Exclusive Admins Management Tab */}
+            {currentTab === 'admins' && isSuperAdmin && <AdminAdmins />}
           </>
         ) : (
           <>

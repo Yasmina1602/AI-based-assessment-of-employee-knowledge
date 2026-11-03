@@ -15,7 +15,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     const res = await this.db.query(
-      'SELECT id, username, full_name, role, department_id, level FROM users WHERE id = $1',
+      `SELECT u.id, u.username, u.full_name, u.role, u.role_id, u.department_id, r.title as role_title
+       FROM users u
+       LEFT JOIN roles r ON u.role_id = r.id OR u.role = r.name
+       WHERE u.id = $1`,
       [payload.sub]
     );
     if (!res.rows[0]) {

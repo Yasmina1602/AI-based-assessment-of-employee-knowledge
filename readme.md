@@ -143,6 +143,7 @@ Tizim birinchi marta ishga tushirilganda quyidagi foydalanuvchilar avtomatik tar
 
 | Rol | Login | Parol | Huquqlari |
 |---|---|---|---|
+| **Superadmin** | `superadmin` | `admin123` | Barcha huquqlar: yangi administratorlar tayinlash, adminlarni tahrirlash/o‘chirish, bo‘limlar, hujjatlar, savollar va natijalar nazorati |
 | **HR / Admin** | `admin` | `admin123` | Bo‘limlar yaratish, vaqt va savollar sonini sozlash, reglament yuklash, "Yangilash" (o‘qitish), savollarni tasdiqlash, barcha xodimlar natijalari va auditni ko‘rish |
 | **Xodim** | `xodim` | `xodim123` | O‘z bo‘limi bo‘yicha test topshirish, taymerni ko‘rish, shaxsiy natijalar va AI tavsiyalarini tahlil qilish |
 

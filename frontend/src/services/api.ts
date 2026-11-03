@@ -64,6 +64,26 @@ export const authService = {
     const res = await api.delete(`/auth/users/${id}`);
     return res.data;
   },
+  getRoles: async () => {
+    const res = await api.get('/auth/roles');
+    return res.data;
+  },
+  getAdmins: async () => {
+    const res = await api.get('/auth/admins');
+    return res.data;
+  },
+  createAdmin: async (data: { username: string; password: string; full_name: string; role?: string }) => {
+    const res = await api.post('/auth/admins', data);
+    return res.data;
+  },
+  updateAdmin: async (id: number, data: { username?: string; password?: string; full_name?: string; role?: string }) => {
+    const res = await api.put(`/auth/admins/${id}`, data);
+    return res.data;
+  },
+  deleteAdmin: async (id: number) => {
+    const res = await api.delete(`/auth/admins/${id}`);
+    return res.data;
+  },
 };
 
 export const departmentService = {

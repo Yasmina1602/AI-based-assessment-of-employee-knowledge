@@ -19,6 +19,64 @@ export class AuthController {
     return req.user;
   }
 
+  // --- ROLES (Admin & Superadmin) ---
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'superadmin')
+  @Get('roles')
+  async getRoles() {
+    return this.authService.getRoles();
+  }
+
+  // --- SUPERADMIN ONLY: ADMIN MANAGEMENT ---
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin')
+  @Get('admins')
+  async getAdmins() {
+    return this.authService.getAdmins();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin')
+  @Post('admins')
+  async createAdmin(@Body() body: {
+    username: string;
+    password: string;
+    full_name: string;
+    role?: string;
+  }) {
+    return this.authService.createAdmin(body);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin')
+  @Put('admins/:id')
+  async updateAdmin(
+    @Request() req,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: {
+      username?: string;
+      password?: string;
+      full_name?: string;
+      role?: string;
+    },
+  ) {
+    return this.authService.updateAdmin(id, body, req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin')
+  @Delete('admins/:id')
+  async deleteAdmin(
+    @Request() req,
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.authService.deleteAdmin(id, req.user.id);
+  }
+
+  // --- EMPLOYEE MANAGEMENT (Admin & Superadmin) ---
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Post('register-employee')
@@ -27,7 +85,6 @@ export class AuthController {
     password: string;
     full_name: string;
     department_id: number;
-    level?: string;
   }) {
     return this.authService.registerEmployee(body);
   }
@@ -56,7 +113,6 @@ export class AuthController {
       password?: string;
       full_name?: string;
       department_id?: number;
-      level?: string;
     },
   ) {
     return this.authService.updateUser(id, body);
@@ -69,4 +125,3 @@ export class AuthController {
     return this.authService.deleteUser(id);
   }
 }
-

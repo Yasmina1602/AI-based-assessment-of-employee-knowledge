@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Building2, FileText, HelpCircle, BarChart3, LogOut, 
-  CheckCircle2, LayoutDashboard, BrainCircuit, Sun, Moon 
+  CheckCircle2, LayoutDashboard, BrainCircuit, Sun, Moon, ShieldCheck 
 } from 'lucide-react';
 import { authService } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
@@ -14,12 +14,13 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user }) => {
   const { isDark, toggleTheme } = useTheme();
-  const isAdmin = user?.role === 'admin';
+  const isSuperAdmin = user?.role === 'superadmin';
+  const isAdmin = user?.role === 'admin' || isSuperAdmin;
 
   // Extract initials (e.g. "Aliyev Vali" -> "AV", or fallback "XO")
   const getInitials = (name?: string) => {
     if (!name) return 'XO';
-    const clean = name.replace(/\s*\(HR\)/i, '').trim();
+    const clean = name.replace(/\s*\((HR|Superadmin|Xodim)\)/i, '').trim();
     const parts = clean.split(/\s+/);
     if (parts.length >= 2) {
       return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -29,6 +30,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
 
   // Format clean display name for header
   const getDisplayName = () => {
+    if (isSuperAdmin) {
+      return user?.full_name || 'Super Administrator';
+    }
     if (isAdmin) {
       if (user?.full_name?.includes('Tizim') || !user?.full_name) {
         return 'HR Admin';
@@ -51,8 +55,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
               <span className="text-lg font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-800 dark:from-white dark:via-indigo-200 dark:to-indigo-300 bg-clip-text text-transparent">
                 Xodim Reyting AI
               </span>
-              <span className="hidden md:inline-block ml-2 text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-200 dark:border-indigo-800/80">
-                {isAdmin ? 'HR Admin Panel' : 'Xodim Portali'}
+              <span className={`hidden md:inline-block ml-2 text-xs px-2.5 py-0.5 rounded-full font-semibold border ${
+                isSuperAdmin
+                  ? 'bg-purple-50 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/80'
+                  : isAdmin
+                    ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80'
+                    : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80'
+              }`}>
+                {isSuperAdmin ? 'Super Admin Panel' : isAdmin ? 'HR Admin Panel' : 'Xodim Portali'}
               </span>
             </div>
           </div>
@@ -120,6 +130,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
                   <BarChart3 className="w-4 h-4" />
                   <span className="hidden sm:inline">Natijalar</span>
                 </button>
+
+                {/* SUPERADMIN ONLY TAB: Adminlarni boshqarish */}
+                {isSuperAdmin && (
+                  <button
+                    onClick={() => setCurrentTab('admins')}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition ${
+                      currentTab === 'admins'
+                        ? 'bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 shadow-sm'
+                        : 'text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/50'
+                    }`}
+                  >
+                    <ShieldCheck className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    <span>Adminlar</span>
+                  </button>
+                )}
               </>
             ) : (
               <>
@@ -172,24 +197,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
               <div className="relative flex-shrink-0">
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-sm ring-2 select-none ${
-                    isAdmin
-                      ? 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white ring-indigo-200 dark:ring-indigo-800/80 shadow-indigo-500/20'
-                      : 'bg-gradient-to-tr from-emerald-500 to-teal-600 text-white ring-teal-200 dark:ring-teal-800/80 shadow-teal-500/20'
+                    isSuperAdmin
+                      ? 'bg-gradient-to-tr from-purple-600 via-pink-600 to-amber-500 text-white ring-purple-300 dark:ring-purple-700 shadow-purple-500/20'
+                      : isAdmin
+                        ? 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 text-white ring-indigo-200 dark:ring-indigo-800/80 shadow-indigo-500/20'
+                        : 'bg-gradient-to-tr from-emerald-500 to-teal-600 text-white ring-teal-200 dark:ring-teal-800/80 shadow-teal-500/20'
                   }`}
                 >
-                  {isAdmin ? 'HR' : getInitials(user?.full_name || user?.username)}
+                  {isSuperAdmin ? 'SA' : isAdmin ? 'HR' : getInitials(user?.full_name || user?.username)}
                 </div>
                 {/* Online status indicator */}
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
               </div>
 
-              {/* Name & Role (No "Barcha bo'limlar" text!) */}
+              {/* Name & Role */}
               <div className="flex flex-col text-left hidden sm:flex">
                 <span className="text-xs font-bold text-gray-900 dark:text-gray-100 leading-tight">
                   {getDisplayName()}
                 </span>
                 <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium leading-none mt-0.5">
-                  {isAdmin ? 'Administrator' : (user?.department_name || 'Xodim')}
+                  {isSuperAdmin ? 'Super Administrator' : isAdmin ? 'HR Administrator' : (user?.department_name || 'Xodim')}
                 </span>
               </div>
 

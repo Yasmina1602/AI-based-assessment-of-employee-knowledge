@@ -35,7 +35,9 @@ Write-Host "  Barcha 3 ta servis muvaffaqiyatli ishga tushirildi!" -ForegroundCo
 Write-Host "  - Frontend: http://localhost:3000"
 Write-Host "  - Backend:  http://localhost:4000"
 Write-Host "  - AI RAG:   http://localhost:8001"
-Write-Host "`n  HR Admin: admin / admin123"
-Write-Host "  Xodim:    xodim / xodim123"
+Write-Host "`n  Standart hisoblar:"
+Write-Host "  - Super Admin: superadmin / admin123"
+Write-Host "  - HR Admin:    admin      / admin123"
+Write-Host "  - Xodim:       xodim      / xodim123"
 Write-Host "======================================================================" -ForegroundColor Cyan
 

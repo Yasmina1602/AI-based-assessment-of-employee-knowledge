@@ -18,6 +18,9 @@ export class RolesGuard implements CanActivate {
     if (!user || !user.role) {
       throw new ForbiddenException('Kirish huquqi yetarli emas');
     }
+    if (user.role === 'superadmin') {
+      return true; // Superadmin barcha administrator huquqlariga ega
+    }
     const hasRole = requiredRoles.includes(user.role);
     if (!hasRole) {
       throw new ForbiddenException(`Ushbu amal faqat quyidagi rollar uchun ruxsat etilgan: ${requiredRoles.join(', ')}`);
