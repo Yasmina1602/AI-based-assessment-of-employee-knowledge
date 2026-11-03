@@ -50,7 +50,7 @@ export const AdminDocuments: React.FC = () => {
     try {
       setSyncingId(id);
       const res = await documentService.sync(id);
-      alert(`Muvaffaqiyatli! ${res.message}. Jami bo'laklar: ${res.chunks_count}, generatsiya qilingan savollar: ${res.generated_questions_count}`);
+      alert(`Muvaffaqiyatli! Hujjat o'rganildi va test savollari shakllantirildi.`);
       loadData();
     } catch (err: any) {
       alert(err.response?.data?.message || "Hujjatni o'rganishda xatolik yuz berdi");
@@ -60,7 +60,7 @@ export const AdminDocuments: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Haqiqatdan ham ushbu hujjatni va uning barcha AI embeddinglarini o'chirmoqchimisiz?")) return;
+    if (!window.confirm("Haqiqatdan ham ushbu hujjatni va unga tegishli savollarni o'chirmoqchimisiz?")) return;
     try {
       await documentService.delete(id);
       loadData();
@@ -159,7 +159,7 @@ export const AdminDocuments: React.FC = () => {
                         {isLearned ? (
                           <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3" />
-                            Model o'rgangan (MBBT da {doc.chunks_count || 0} ta vektor bo'lak)
+                            O'rganilgan ({doc.chunks_count || 0} ta qism)
                           </span>
                         ) : doc.status === 'processing' || isSyncing ? (
                           <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 animate-pulse">

@@ -94,7 +94,7 @@ export const EmployeeResults: React.FC = () => {
               <span className="text-base font-bold">{session.closed_score} ta to'g'ri</span>
             </div>
             <div>
-              <span className="text-white/60 block">Ochiq savollar (AI):</span>
+              <span className="text-white/60 block">Ochiq savollar:</span>
               <span className="text-base font-bold">{session.open_score} ball</span>
             </div>
             <div>
@@ -110,60 +110,75 @@ export const EmployeeResults: React.FC = () => {
 
         {/* Detailed Feedback */}
         <div className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Savollar tahlili va AI fikrlari</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Savollar tahlili va natijalar</h2>
 
           {details.map((item: any) => {
             const isClosed = item.question_type === 'closed';
             const aiEval = item.ai_evaluation;
 
             return (
-              <div key={item.order} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+              <div key={item.order} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-xs font-bold text-indigo-600 block mb-1">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-1">
                       {item.order}-savol • {isClosed ? 'Yopiq savol' : 'Ochiq savol'}
                     </span>
-                    <h3 className="text-sm font-bold text-gray-900">{item.question_text}</h3>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">{item.question_text}</h3>
                   </div>
 
                   <div className="shrink-0">
                     {isClosed ? (
                       item.is_correct ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                           <CheckCircle2 className="w-3.5 h-3.5" /> To'g'ri
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-700">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200">
                           <XCircle className="w-3.5 h-3.5" /> Noto'g'ri
                         </span>
                       )
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700">
+                      <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
                         <Star className="w-3.5 h-3.5 fill-purple-700" /> {item.score} / 5 ball
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Open question AI feedback */}
-                {!isClosed && aiEval && (
-                  <div className="bg-purple-50/60 p-4 rounded-xl border border-purple-100 text-xs text-purple-950 space-y-2">
-                    <div className="flex items-center gap-1.5 font-bold text-purple-900">
-                      <BrainCircuit className="w-4 h-4 text-purple-600" />
-                      <span>AI Tahlili va Izohlari:</span>
+                {/* Open question employee answer & AI feedback */}
+                {!isClosed && (
+                  <div className="space-y-3">
+                    {/* Xodimning bergan javobi */}
+                    <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 text-xs">
+                      <span className="font-bold text-gray-700 dark:text-gray-300 block mb-1">
+                        Sizning javobingiz:
+                      </span>
+                      <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap leading-relaxed">
+                        {item.answer_text ? item.answer_text : <span className="text-gray-400 italic">Javob yozilmagan</span>}
+                      </p>
                     </div>
 
-                    {aiEval.explanation && <p className="italic">{aiEval.explanation}</p>}
+                    {/* AI Feedback */}
+                    {aiEval && (
+                      <div className="bg-purple-50/60 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-100 dark:border-purple-800/40 text-xs text-purple-950 dark:text-purple-200 space-y-2">
+                        <div className="flex items-center gap-1.5 font-bold text-purple-900 dark:text-purple-300">
+                          <BrainCircuit className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                          <span>AI Tahlili va Izohlari:</span>
+                        </div>
 
-                    {Array.isArray(aiEval.strengths) && aiEval.strengths.length > 0 && (
-                      <div className="text-emerald-800">
-                        <b>Kuchli jihatlar:</b> {aiEval.strengths.join('; ')}
-                      </div>
-                    )}
+                        {aiEval.explanation && <p className="italic text-purple-900 dark:text-purple-200">{aiEval.explanation}</p>}
 
-                    {Array.isArray(aiEval.weaknesses) && aiEval.weaknesses.length > 0 && (
-                      <div className="text-rose-800">
-                        <b>E'tibor berish kerak bo'lgan kamchiliklar:</b> {aiEval.weaknesses.join('; ')}
+                        {Array.isArray(aiEval.strengths) && aiEval.strengths.length > 0 && (
+                          <div className="text-emerald-800 dark:text-emerald-300">
+                            <b>Kuchli jihatlar:</b> {aiEval.strengths.join('; ')}
+                          </div>
+                        )}
+
+                        {Array.isArray(aiEval.weaknesses) && aiEval.weaknesses.length > 0 && (
+                          <div className="text-rose-800 dark:text-rose-300">
+                            <b>E'tibor berish kerak bo'lgan kamchiliklar:</b> {aiEval.weaknesses.join('; ')}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

@@ -209,7 +209,7 @@ export const AdminQuestions: React.FC = () => {
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${
                       q.question_type === 'closed' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'
                     }`}>
-                      {q.question_type === 'closed' ? 'Yopiq savol' : 'Ochiq savol (RAG + AI)'}
+                      {q.question_type === 'closed' ? 'Yopiq savol' : 'Ochiq savol'}
                     </span>
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700">
                       {q.level || 'Middle'}
@@ -366,7 +366,7 @@ export const AdminQuestions: React.FC = () => {
                     className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none"
                   >
                     <option value="closed">Yopiq (4 ta variantli)</option>
-                    <option value="open">Ochiq (AI tahlili)</option>
+                    <option value="open">Ochiq (Matnli javob)</option>
                   </select>
                 </div>
               </div>

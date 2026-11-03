@@ -160,7 +160,7 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">
-                      {item.order}-savol • {isClosed ? 'Yopiq savol' : 'Ochiq savol (RAG + AI Baholash)'}
+                      {item.order}-savol • {isClosed ? 'Yopiq savol' : 'Ochiq savol'}
                     </span>
                     <h3 className="text-base font-bold text-gray-900">{item.question_text}</h3>
                   </div>
@@ -222,19 +222,19 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
 
                     {aiEval && (
                       <div className="bg-purple-50/70 p-4 rounded-xl border border-purple-200 text-xs text-purple-950 space-y-2">
-                        <div className="flex items-center gap-1.5 font-bold text-purple-900 text-sm">
-                          <BrainCircuit className="w-4 h-4 text-purple-600" />
-                          <span>AI Baholash Tahlili (Ball: {aiEval.score} / 5)</span>
+                        <div className="flex items-center gap-1.5 font-bold text-purple-900 dark:text-purple-300 text-sm">
+                          <BrainCircuit className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                          <span>AI Tahlili va Izohlari (Ball: {aiEval.score} / 5)</span>
                         </div>
 
                         {aiEval.explanation && (
-                          <p className="italic text-purple-900">{aiEval.explanation}</p>
+                          <p className="italic text-purple-900 dark:text-purple-200">{aiEval.explanation}</p>
                         )}
 
                         {Array.isArray(aiEval.strengths) && aiEval.strengths.length > 0 && (
                           <div>
-                            <span className="font-bold text-emerald-800 block">Kuchli jihatlari:</span>
-                            <ul className="list-disc list-inside text-emerald-900 space-y-0.5">
+                            <span className="font-bold text-emerald-800 dark:text-emerald-300 block">Kuchli jihatlari:</span>
+                            <ul className="list-disc list-inside text-emerald-900 dark:text-emerald-200 space-y-0.5">
                               {aiEval.strengths.map((s: string, i: number) => (
                                 <li key={i}>{s}</li>
                               ))}
@@ -244,21 +244,10 @@ export const AdminResults: React.FC<AdminResultsProps> = ({ initialSessionId }) 
 
                         {Array.isArray(aiEval.weaknesses) && aiEval.weaknesses.length > 0 && (
                           <div>
-                            <span className="font-bold text-rose-800 block">Kamchiliklar / Xatoliklar:</span>
-                            <ul className="list-disc list-inside text-rose-900 space-y-0.5">
+                            <span className="font-bold text-rose-800 dark:text-rose-300 block">Kamchiliklar / Xatoliklar:</span>
+                            <ul className="list-disc list-inside text-rose-900 dark:text-rose-200 space-y-0.5">
                               {aiEval.weaknesses.map((w: string, i: number) => (
                                 <li key={i}>{w}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {Array.isArray(aiEval.missing_points) && aiEval.missing_points.length > 0 && (
-                          <div>
-                            <span className="font-bold text-amber-800 block">Yetishmagan muhim nuqtalar:</span>
-                            <ul className="list-disc list-inside text-amber-900 space-y-0.5">
-                              {aiEval.missing_points.map((m: string, i: number) => (
-                                <li key={i}>{m}</li>
                               ))}
                             </ul>
                           </div>

@@ -171,7 +171,7 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
         </div>
         <h2 className="text-2xl font-bold mb-2">AI Natijalaringizni Baholamoqda...</h2>
         <p className="text-indigo-200 text-sm max-w-md mb-4">
-          Yopiq savollar tekshirildi. Ochiq savollaringiz RAG orqali me'yoriy reglamentlar bilan solishtirilib, 1-5 ball shkalada baholanmoqda.
+          Yopiq savollar tekshirildi. Ochiq savollaringiz korxona reglamentlari bilan solishtirilib, xolisona baholanmoqda.
         </p>
         <div className="w-48 bg-slate-800 h-2 rounded-full overflow-hidden">
           <div className="bg-indigo-500 h-full w-2/3 animate-pulse" />

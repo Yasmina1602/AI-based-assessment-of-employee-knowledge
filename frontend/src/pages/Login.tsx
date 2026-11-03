@@ -75,7 +75,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             Xodim Bilimini Baholash
           </h1>
           <p className="text-indigo-200/70 text-sm mt-1">
-            AI & RAG asosidagi avtomatlashtirilgan test tizimi
+            Sun'iy intellekt asosidagi avtomatlashtirilgan baholash tizimi
           </p>
         </div>
 

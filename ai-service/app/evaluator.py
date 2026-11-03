@@ -74,7 +74,6 @@ XAVFSIZLIK VA BAHOLASH QOIDALARI:
   "explanation": "Baholashning qisqacha xulosasi...",
   "strengths": ["To'g'ri aytilgan 1-jihat", "To'g'ri aytilgan 2-jihat"],
   "weaknesses": ["Kamchilik yoki noaniqlik"],
-  "missing_points": ["Yetishmagan muhim nuqtalar"],
   "sources": ["Foydalanilgan manbalar ko'rsatmasi"],
   "confidence": 0.95
 }}
@@ -113,7 +112,6 @@ XAVFSIZLIK VA BAHOLASH QOIDALARI:
                 "explanation": "Baholash jarayonida xatolik yuz berdi. HR ko'rib chiqishi talab etiladi.",
                 "strengths": [],
                 "weaknesses": ["Javobni tahlil qilishda nosozlik"],
-                "missing_points": [],
                 "sources": [],
                 "confidence": 0.0,
                 "model_used": result.get("model_used", "")
