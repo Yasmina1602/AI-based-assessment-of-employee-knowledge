@@ -36,14 +36,34 @@ html.dark .bg-white {
   background-color: #111827;
 }
 
-html.dark .bg-slate-50,
-html.dark .bg-gray-50 {
-  background-color: #0b0f19;
+html.dark [class*="bg-gray-50"],
+html.dark [class*="bg-slate-50"] {
+  background-color: #0d1526;
 }
 
-html.dark .bg-slate-50\/50,
-html.dark .bg-gray-50\/50 {
-  background-color: #141d2e;
+html.dark [class*="bg-gray-100"],
+html.dark [class*="bg-slate-100"] {
+  background-color: #162035;
+  color: #f1f5f9;
+}
+
+html.dark [class*="bg-gray-200"],
+html.dark [class*="bg-slate-200"] {
+  background-color: #1f2d48;
+  color: #f8fafc;
+}
+
+/* Ensure buttons with light/white backgrounds have proper dark mode styling */
+html.dark button.bg-white,
+html.dark a.bg-white {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+html.dark button.bg-white:hover,
+html.dark a.bg-white:hover {
+  background-color: #27354f;
 }
 
 html.dark .border-gray-100,
@@ -75,12 +95,12 @@ html.dark .text-slate-700 {
 
 html.dark .text-gray-600,
 html.dark .text-slate-600 {
-  color: #94a3b8;
+  color: #cbd5e1;
 }
 
 html.dark .text-gray-500,
 html.dark .text-slate-500 {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 html.dark .hover\:bg-gray-50:hover,

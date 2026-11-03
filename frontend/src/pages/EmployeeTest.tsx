@@ -322,18 +322,20 @@ export const EmployeeTest: React.FC<EmployeeTestProps> = ({ user, onViewResults 
                       <div
                         key={opt.id}
                         onClick={() => handleSelectOption(opt.id)}
-                        className={`p-4 rounded-2xl border-2 cursor-pointer transition flex items-center gap-3.5 ${
+                        className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-150 flex items-center gap-3.5 ${
                           isSelected
-                            ? 'bg-indigo-50/70 border-indigo-600 text-indigo-950 font-semibold shadow-sm'
-                            : 'bg-gray-50/60 border-gray-100 text-gray-700 hover:bg-gray-50 hover:border-gray-200'
+                            ? 'bg-indigo-50/90 dark:bg-indigo-950/70 border-indigo-600 dark:border-indigo-400 text-indigo-950 dark:text-indigo-100 font-semibold shadow-md shadow-indigo-500/10 ring-2 ring-indigo-500/20'
+                            : 'bg-white dark:bg-[#131d31] border-gray-200 dark:border-slate-700/80 text-gray-800 dark:text-slate-100 hover:bg-indigo-50/40 dark:hover:bg-slate-800 hover:border-indigo-300 dark:hover:border-slate-500 shadow-sm'
                         }`}
                       >
-                        <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                          isSelected ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
+                        <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 transition ${
+                          isSelected
+                            ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-sm shadow-indigo-500/40'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
                         }`}>
                           {String.fromCharCode(65 + oIdx)}
                         </span>
-                        <span className="text-sm">{opt.option_text}</span>
+                        <span className="text-sm sm:text-base leading-snug">{opt.option_text}</span>
                       </div>
                     );
                   })}

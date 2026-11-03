@@ -52,6 +52,18 @@ export const authService = {
     const res = await api.post('/auth/register-employee', data);
     return res.data;
   },
+  getDepartmentEmployees: async (deptId: number) => {
+    const res = await api.get(`/auth/departments/${deptId}/employees`);
+    return res.data;
+  },
+  updateUser: async (id: number, data: any) => {
+    const res = await api.put(`/auth/users/${id}`, data);
+    return res.data;
+  },
+  deleteUser: async (id: number) => {
+    const res = await api.delete(`/auth/users/${id}`);
+    return res.data;
+  },
 };
 
 export const departmentService = {
@@ -171,6 +183,12 @@ export const resultService = {
   },
   getMy: async () => {
     const res = await api.get('/results/my');
+    return res.data;
+  },
+  getLeaderboard: async (deptId?: number) => {
+    const res = await api.get('/results/leaderboard', {
+      params: deptId ? { department_id: deptId } : {},
+    });
     return res.data;
   },
 };

@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
             </div>
             <div>
               <span className="text-lg font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-indigo-800 dark:from-white dark:via-indigo-200 dark:to-indigo-300 bg-clip-text text-transparent">
-                Xodim Baholash AI
+                Xodim Reyting AI
               </span>
               <span className="hidden md:inline-block ml-2 text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-200 dark:border-indigo-800/80">
                 {isAdmin ? 'HR Admin Panel' : 'Xodim Portali'}

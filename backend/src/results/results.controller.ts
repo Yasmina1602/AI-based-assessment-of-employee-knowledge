@@ -16,6 +16,15 @@ export class ResultsController {
     return this.resultsService.getDashboardStats();
   }
 
+  @Get('leaderboard')
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  getLeaderboard(@Query('department_id') departmentId?: string) {
+    return this.resultsService.getLeaderboard(
+      departmentId ? parseInt(departmentId, 10) : undefined,
+    );
+  }
+
   @Get('all')
   @UseGuards(RolesGuard)
   @Roles('admin')

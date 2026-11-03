@@ -93,6 +93,46 @@ export class ResultsService {
     return res.rows;
   }
 
+  async getLeaderboard(departmentId?: number) {
+    let query = `
+      SELECT 
+        u.id as user_id,
+        u.full_name as employee_name,
+        u.username,
+        u.level,
+        d.id as department_id,
+        d.name as department_name,
+        COUNT(s.id) as total_tests_taken,
+        COUNT(CASE WHEN s.is_passed = TRUE THEN 1 END) as passed_tests_count,
+        COALESCE(MAX(s.percentage), 0) as max_score,
+        COALESCE(ROUND(AVG(s.percentage)::numeric, 1), 0) as avg_score,
+        COALESCE(SUM(s.cheat_warnings_count), 0) as total_cheat_warnings
+      FROM users u
+      LEFT JOIN departments d ON u.department_id = d.id
+      LEFT JOIN test_sessions s ON s.user_id = u.id AND s.status IN ('completed', 'timed_out', 'cancelled_cheat')
+      WHERE u.role = 'xodim'
+    `;
+    const params: any[] = [];
+    if (departmentId) {
+      query += ` AND u.department_id = $1`;
+      params.push(departmentId);
+    }
+    query += `
+      GROUP BY u.id, u.full_name, u.username, u.level, d.id, d.name
+      ORDER BY avg_score DESC, max_score DESC, passed_tests_count DESC
+    `;
+    const res = await this.db.query(query, params);
+    return res.rows.map((row, idx) => ({
+      ...row,
+      rank: idx + 1,
+      total_tests_taken: parseInt(row.total_tests_taken, 10),
+      passed_tests_count: parseInt(row.passed_tests_count, 10),
+      max_score: parseFloat(row.max_score),
+      avg_score: parseFloat(row.avg_score),
+      total_cheat_warnings: parseInt(row.total_cheat_warnings, 10),
+    }));
+  }
+
   async getMyResults(userId: number) {
     const res = await this.db.query(
       `SELECT s.id, s.percentage, s.total_score, s.closed_score, s.open_score,

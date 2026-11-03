@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, BadRequestException, OnModuleInit, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, NotFoundException, OnModuleInit, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { DatabaseService } from '../database/database.service';
@@ -131,5 +131,75 @@ export class AuthService implements OnModuleInit {
        ORDER BY u.created_at DESC`
     );
     return res.rows;
+  }
+
+  async getUsersByDepartment(departmentId: number) {
+    const res = await this.db.query(
+      `SELECT u.id, u.username, u.full_name, u.role, u.department_id, u.level, u.created_at, d.name as department_name
+       FROM users u
+       LEFT JOIN departments d ON u.department_id = d.id
+       WHERE u.department_id = $1 AND u.role = 'xodim'
+       ORDER BY u.full_name ASC`,
+      [departmentId]
+    );
+    return res.rows;
+  }
+
+  async updateUser(
+    id: number,
+    data: {
+      username?: string;
+      password?: string;
+      full_name?: string;
+      department_id?: number;
+      level?: string;
+    }
+  ) {
+    const userRes = await this.db.query('SELECT * FROM users WHERE id = $1', [id]);
+    if (!userRes.rows[0]) {
+      throw new NotFoundException('Foydalanuvchi topilmadi');
+    }
+
+    if (data.username && data.username !== userRes.rows[0].username) {
+      const existing = await this.db.query(
+        'SELECT id FROM users WHERE username = $1 AND id != $2',
+        [data.username, id]
+      );
+      if (existing.rows[0]) {
+        throw new BadRequestException('Bu login allaqachon boshqa foydalanuvchi tomonidan band qilingan');
+      }
+    }
+
+    let passwordHash = userRes.rows[0].password_hash;
+    if (data.password && data.password.trim().length > 0) {
+      passwordHash = await bcrypt.hash(data.password, 10);
+    }
+
+    const username = data.username || userRes.rows[0].username;
+    const fullName = data.full_name || userRes.rows[0].full_name;
+    const departmentId = data.department_id !== undefined ? data.department_id : userRes.rows[0].department_id;
+    const level = data.level || userRes.rows[0].level || 'Middle';
+
+    const updateRes = await this.db.query(
+      `UPDATE users
+       SET username = $1, password_hash = $2, full_name = $3, department_id = $4, level = $5
+       WHERE id = $6
+       RETURNING id, username, full_name, role, department_id, level, created_at`,
+      [username, passwordHash, fullName, departmentId, level, id]
+    );
+
+    return updateRes.rows[0];
+  }
+
+  async deleteUser(id: number) {
+    const userRes = await this.db.query('SELECT role FROM users WHERE id = $1', [id]);
+    if (!userRes.rows[0]) {
+      throw new NotFoundException('Foydalanuvchi topilmadi');
+    }
+    if (userRes.rows[0].role === 'admin') {
+      throw new BadRequestException("Administrator hisobini o'chirish mumkin emas");
+    }
+    await this.db.query('DELETE FROM users WHERE id = $1', [id]);
+    return { success: true, message: "Xodim muvaffaqiyatli o'chirildi" };
   }
 }

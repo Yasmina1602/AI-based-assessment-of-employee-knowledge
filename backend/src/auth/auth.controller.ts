@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RolesGuard } from './roles.guard';
@@ -37,6 +37,36 @@ export class AuthController {
   @Get('users')
   async getUsers() {
     return this.authService.getAllUsers();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Get('departments/:deptId/employees')
+  async getDepartmentEmployees(@Param('deptId', ParseIntPipe) deptId: number) {
+    return this.authService.getUsersByDepartment(deptId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Put('users/:id')
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: {
+      username?: string;
+      password?: string;
+      full_name?: string;
+      department_id?: number;
+      level?: string;
+    },
+  ) {
+    return this.authService.updateUser(id, body);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Delete('users/:id')
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.authService.deleteUser(id);
   }
 }
 

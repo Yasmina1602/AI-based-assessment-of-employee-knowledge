@@ -450,6 +450,15 @@ export class TestSessionsService {
       [sessionId]
     );
 
+    // Fetch anti-cheat logs for this session
+    const logsRes = await this.db.query(
+      `SELECT id, event_type, details, created_at
+       FROM anti_cheat_logs
+       WHERE session_id = $1
+       ORDER BY created_at ASC`,
+      [sessionId]
+    );
+
     return {
       session: {
         id: session.id,
@@ -468,6 +477,7 @@ export class TestSessionsService {
         is_passed: session.is_passed,
         cheat_warnings_count: session.cheat_warnings_count,
       },
+      anti_cheat_logs: logsRes.rows,
       details: answersRes.rows.map((r) => {
         const snap = typeof r.question_snapshot === 'string'
           ? JSON.parse(r.question_snapshot)

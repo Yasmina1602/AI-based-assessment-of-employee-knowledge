@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title AI-Powered Xodimlar Bilimini Baholash Tizimi
+title Xodim Reyting AI
 
 echo ======================================================================
-echo   🧠 AI-POWERED XODIMLAR BILIMINI BAHOLASH TIZIMI
+echo   🧠 XODIM REYTING AI — XODIMLAR BILIMINI BAHOLASH VA REYTING TIZIMI
 echo ======================================================================
 echo.
 

@@ -48,7 +48,26 @@ export const EmployeeResults: React.FC = () => {
 
   // Detailed Modal/View
   if (activeSessionId && sessionDetail) {
-    const { session, details } = sessionDetail;
+    const { session, details, anti_cheat_logs } = sessionDetail;
+
+    const getCheatEventLabel = (type: string) => {
+      switch (type) {
+        case 'tab_hidden':
+          return { title: "Boshqa tabga o'tish", desc: "Foydalanuvchi brauzerda boshqa sahifa yoki tabga o'tdi" };
+        case 'window_blur':
+          return { title: "Oynadan tashqariga chiqish", desc: "Foydalanuvchi ekrandagi boshqa dasturga o'tdi" };
+        case 'copy_attempt':
+          return { title: "Nusxalash urinishi (Ctrl+C / Copy)", desc: "Savol yoki matnni nusxalashga harakat qilindi" };
+        case 'paste_attempt':
+          return { title: "Joylash urinishi (Ctrl+V / Paste)", desc: "Tashqi matnni javob maydoniga joylashga urinish" };
+        case 'devtools_key':
+          return { title: "Dasturchi uskunalarini ochish (F12 / DevTools)", desc: "Konsol yoki kod ko'rish oynasini ochish urinishi" };
+        case 'fullscreen_exit':
+          return { title: "Ekran rejimidan chiqish", desc: "To'liq ekran holatidan chiqildi" };
+        default:
+          return { title: "Qoidabuzarlik urinishi", desc: type };
+      }
+    };
 
     return (
       <div className="max-w-4xl mx-auto space-y-6 py-4">
@@ -57,7 +76,7 @@ export const EmployeeResults: React.FC = () => {
             setActiveSessionId(null);
             setSessionDetail(null);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold rounded-xl shadow-sm transition"
+          className="inline-flex items-center gap-2 px-3.5 py-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 text-sm font-semibold rounded-xl shadow-sm transition"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Natijalar ro'yxatiga qaytish</span>
@@ -107,6 +126,56 @@ export const EmployeeResults: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Anti-Cheat Violations Card (If any violation was recorded) */}
+        {((session.cheat_warnings_count > 0) || (anti_cheat_logs && anti_cheat_logs.length > 0)) && (
+          <div className="bg-rose-50/80 dark:bg-rose-950/40 p-5 rounded-3xl border-2 border-rose-200 dark:border-rose-900/60 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-rose-900 dark:text-rose-200 font-bold text-sm">
+                <ShieldAlert className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                <span>Anti-Cheat Nazorati: Qoidabuzarliklar Qaydnomasi</span>
+              </div>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-200">
+                {anti_cheat_logs?.length || session.cheat_warnings_count || 0} ta ogohlantirish
+              </span>
+            </div>
+
+            {session.status === 'cancelled_cheat' && (
+              <div className="p-3 bg-red-600 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-sm">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>Diqqat: Siz test paytida 3 marta qoidabuzarlik sodir etganingiz sababli test bekor qilingan!</span>
+              </div>
+            )}
+
+            <div className="space-y-2 mt-2">
+              {Array.isArray(anti_cheat_logs) && anti_cheat_logs.length > 0 ? (
+                anti_cheat_logs.map((log: any, idx: number) => {
+                  const info = getCheatEventLabel(log.event_type);
+                  return (
+                    <div key={log.id || idx} className="bg-white/90 dark:bg-slate-900/80 p-3.5 rounded-2xl border border-rose-100 dark:border-rose-900/40 flex items-start justify-between gap-3 text-xs">
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <div className="font-bold text-rose-900 dark:text-rose-200">{info.title}</div>
+                          <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{info.desc}</div>
+                        </div>
+                      </div>
+                      <div className="text-[11px] text-gray-400 dark:text-gray-400 font-mono shrink-0">
+                        {log.created_at ? new Date(log.created_at).toLocaleTimeString('uz-UZ') : ''}
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-xs text-rose-800 dark:text-rose-300">
+                  {session.cheat_warnings_count} marta boshqa oynaga chalg'ish yoki ruxsatsiz amal qayd etilgan.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Detailed Feedback */}
         <div className="space-y-4">

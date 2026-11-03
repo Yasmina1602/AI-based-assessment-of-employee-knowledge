@@ -72,7 +72,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             <BrainCircuit className="w-10 h-10" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Xodim Bilimini Baholash
+            Xodim Reyting AI
           </h1>
           <p className="text-indigo-200/70 text-sm mt-1">
             Sun'iy intellekt asosidagi avtomatlashtirilgan baholash tizimi
