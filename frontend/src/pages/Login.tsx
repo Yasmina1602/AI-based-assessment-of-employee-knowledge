@@ -21,7 +21,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       const data = await authService.login(username, password);
       onLoginSuccess(data.user);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Login yoki parol noto'g'ri");
+      if (!err.response) {
+        setError("Backend serveriga ulanib bo'lmadi (http://localhost:4000). Server ishga tushirilganligini tekshiring.");
+      } else {
+        setError(err.response?.data?.message || "Login yoki parol noto'g'ri");
+      }
     } finally {
       setLoading(false);
     }
@@ -36,7 +40,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       const data = await authService.login(u, p);
       onLoginSuccess(data.user);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Kirishda xatolik yuz berdi');
+      if (!err.response) {
+        setError("Backend serveriga ulanib bo'lmadi (http://localhost:4000). Server ishga tushirilganligini tekshiring.");
+      } else {
+        setError(err.response?.data?.message || 'Kirishda xatolik yuz berdi');
+      }
     } finally {
       setLoading(false);
     }
