@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { documentService, departmentService } from '../services/api';
 import { 
   FileText, Upload, RefreshCw, Trash2, CheckCircle2, 
-  AlertCircle, Sparkles, Building2, HelpCircle, X, AlertTriangle 
+  AlertCircle, Sparkles, Building2, Eye, Download, X, AlertTriangle, Plus, Filter 
 } from 'lucide-react';
 
 export const AdminDocuments: React.FC = () => {
@@ -10,6 +10,9 @@ export const AdminDocuments: React.FC = () => {
   const [departments, setDepartments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncingId, setSyncingId] = useState<number | null>(null);
+
+  // Department Filter
+  const [selectedDeptId, setSelectedDeptId] = useState<string>('');
 
   // Upload Modal State
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -19,6 +22,11 @@ export const AdminDocuments: React.FC = () => {
   const [uploadLoading, setUploadLoading] = useState(false);
   const [autoLearn, setAutoLearn] = useState(true);
   const [uploadStatusText, setUploadStatusText] = useState('');
+
+  // Document Preview Modal State
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<any>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -47,6 +55,7 @@ export const AdminDocuments: React.FC = () => {
    * "YANGILASH" (Sync & Learn) TUGMASI:
    * AI modeli hujjatni o'rganadi, chunklarga bo'ladi, embeddinglarni hisoblab
    * PostgreSQL bazasiga saqlaydi va test savollarini shakllantiradi!
+   * Eski hujjatlar va savollarga tegilmaydi (Token tejaladi!).
    */
   const handleSyncDocument = async (id: number) => {
     try {
@@ -72,6 +81,19 @@ export const AdminDocuments: React.FC = () => {
     }
   };
 
+  const handleOpenUpload = (deptId?: number) => {
+    if (deptId) {
+      setUploadDeptId(deptId);
+    } else if (selectedDeptId) {
+      setUploadDeptId(Number(selectedDeptId));
+    } else if (departments.length > 0) {
+      setUploadDeptId(departments[0].id);
+    }
+    setUploadTitle('');
+    setUploadFile(null);
+    setUploadModalOpen(true);
+  };
+
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadFile || !uploadDeptId) {
@@ -85,11 +107,11 @@ export const AdminDocuments: React.FC = () => {
       const newDoc = await documentService.upload(uploadFile, Number(uploadDeptId), uploadTitle);
 
       if (autoLearn && newDoc?.id) {
-        setUploadStatusText("AI model hujjatni o'qimoqda va test savollarini tuzmoqda (15-20 soniya)...");
+        setUploadStatusText("AI model hujjatni o'qimoqda va yangi test savollarini tuzmoqda (15-20 soniya)...");
         try {
           const syncRes = await documentService.sync(newDoc.id);
           const count = syncRes.generated_questions_count || 13;
-          alert(`Muvaffaqiyatli! Hujjat yuklandi va AI modeliga o'qitildi. ${count} ta yangi test savollari shakllantirildi!`);
+          alert(`Muvaffaqiyatli! Yangi hujjat yuklandi va AI modeliga o'qitildi. ${count} ta yangi test savollari bo'lim savollar bankiga qo'shildi!`);
         } catch (syncErr: any) {
           alert("Hujjat yuklandi, ammo AI modeliga o'qitishda xatolik yuz berdi. Ro'yxatdagi 'Yangilash' tugmasini bosing.");
         }
@@ -109,6 +131,26 @@ export const AdminDocuments: React.FC = () => {
     }
   };
 
+  // Open Document Preview Modal
+  const handleOpenPreview = async (docId: number) => {
+    try {
+      setPreviewLoading(true);
+      setPreviewModalOpen(true);
+      const data = await documentService.getContent(docId);
+      setPreviewDoc(data);
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Hujjat matnini ochishda xatolik yuz berdi");
+      setPreviewModalOpen(false);
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
+
+  // Filtered documents
+  const filteredDocuments = selectedDeptId
+    ? documents.filter((d) => String(d.department_id) === String(selectedDeptId))
+    : documents;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -116,40 +158,94 @@ export const AdminDocuments: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Ichki Reglamentlar va Hujjatlar</h1>
           <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
-            PDF/DOCX/TXT hujjatlarni yuklang — AI modeli reglamentni o'rganadi va avtomatik test savollarini tuzadi
+            Har bir bo'lim uchun me'yoriy hujjatlarni yuklang, matnini ochib ko'ring va AI modeliga o'rgating
           </p>
         </div>
 
         <button
-          onClick={() => setUploadModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-indigo-100 dark:shadow-none transition"
+          onClick={() => handleOpenUpload()}
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-indigo-100 dark:shadow-none transition shrink-0"
         >
           <Upload className="w-4 h-4" />
           <span>Yangi Hujjat Yuklash</span>
         </button>
       </div>
 
+      {/* Department Tabs Filter */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button
+          onClick={() => setSelectedDeptId('')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-2 ${
+            selectedDeptId === ''
+              ? 'bg-indigo-600 text-white shadow-sm'
+              : 'bg-white dark:bg-slate-900 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800'
+          }`}
+        >
+          <Filter className="w-3.5 h-3.5" />
+          <span>Barcha bo'limlar ({documents.length})</span>
+        </button>
+
+        {departments.map((dept) => {
+          const deptDocsCount = documents.filter((d) => d.department_id === dept.id).length;
+          const isSelected = String(dept.id) === selectedDeptId;
+
+          return (
+            <button
+              key={dept.id}
+              onClick={() => setSelectedDeptId(String(dept.id))}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-2 ${
+                isSelected
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-900 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Building2 className="w-3.5 h-3.5 opacity-70" />
+              <span>{dept.name}</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                isSelected ? 'bg-indigo-700 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400'
+              }`}>
+                {deptDocsCount}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Documents List */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="p-5 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-sm font-bold text-gray-900 dark:text-white">Mavjud Hujjatlar ({documents.length})</span>
-          <span className="text-xs text-gray-400 dark:text-slate-400">Qo'llab-quvvatlanadi: PDF, DOCX, TXT</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-gray-900 dark:text-white">
+              {selectedDeptId 
+                ? `${departments.find((d) => String(d.id) === selectedDeptId)?.name || "Bo'lim"} hujjatlari (${filteredDocuments.length})` 
+                : `Mavjud Barcha Hujjatlar (${filteredDocuments.length})`}
+            </span>
+          </div>
+          
+          <button
+            onClick={() => handleOpenUpload(selectedDeptId ? Number(selectedDeptId) : undefined)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold rounded-lg transition"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Yana hujjat qo'shish</span>
+          </button>
         </div>
 
         <div className="divide-y divide-gray-50 dark:divide-slate-800/60">
-          {documents.length === 0 ? (
+          {filteredDocuments.length === 0 ? (
             <div className="py-12 text-center text-gray-400 dark:text-slate-500">
               <FileText className="w-12 h-12 mx-auto text-gray-300 dark:text-slate-600 mb-2" />
-              <p className="text-sm">Hozircha hujjatlar yuklanmagan.</p>
+              <p className="text-sm font-medium">Ushbu bo'limda hozircha hujjatlar mavjud emas.</p>
               <button
-                onClick={() => setUploadModalOpen(true)}
-                className="mt-3 text-indigo-600 dark:text-indigo-400 text-xs font-semibold hover:underline"
+                onClick={() => handleOpenUpload(selectedDeptId ? Number(selectedDeptId) : undefined)}
+                className="mt-3 inline-flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-xs font-semibold hover:underline"
               >
-                Birinchi reglamentni yuklash
+                <Plus className="w-4 h-4" />
+                <span>Ushbu bo'limga birinchi reglamentni yuklash</span>
               </button>
             </div>
           ) : (
-            documents.map((doc) => {
+            filteredDocuments.map((doc) => {
               const isSyncing = syncingId === doc.id;
               const isLearned = doc.status === 'learned';
               const questionsCount = Number(doc.generated_questions_count || 0);
@@ -161,7 +257,11 @@ export const AdminDocuments: React.FC = () => {
                       <FileText className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-white">{doc.title}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-gray-900 dark:text-white">{doc.title}</h4>
+                        <span className="text-xs text-gray-400 dark:text-slate-500">#{doc.id}</span>
+                      </div>
+                      
                       <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-gray-500 dark:text-slate-400">
                         <span className="flex items-center gap-1 font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded-md">
                           <Building2 className="w-3 h-3" />
@@ -199,15 +299,26 @@ export const AdminDocuments: React.FC = () => {
 
                         {questionsCount > 0 && (
                           <span className="text-[11px] text-gray-600 dark:text-slate-300 font-semibold bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
-                            Savollar: <b>{questionsCount} ta</b>
+                            Savollar bankiga qo'shildi: <b>{questionsCount} ta</b>
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Actions: "Yangilash" & "O'chirish" */}
+                  {/* Actions: "Ko'rish", "Yangilash" & "O'chirish" */}
                   <div className="flex items-center gap-2 self-end md:self-center shrink-0">
+                    {/* Hujjatni ochib ko'rish */}
+                    <button
+                      onClick={() => handleOpenPreview(doc.id)}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition shadow-sm"
+                      title="Hujjat matnini ochib ko'rish"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                      <span>Ko'rish</span>
+                    </button>
+
+                    {/* Modelga o'qitish / qayta yangilash */}
                     <button
                       onClick={() => handleSyncDocument(doc.id)}
                       disabled={isSyncing}
@@ -219,9 +330,10 @@ export const AdminDocuments: React.FC = () => {
                       title="Modelga qayta o'qitish va vektorlarni yangilash"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-                      <span>{isSyncing ? "O'rganilmoqda..." : isLearned ? 'Qayta Yangilash' : "⚡ Modelga O'qitish (Savollar tuzish)"}</span>
+                      <span>{isSyncing ? "O'rganilmoqda..." : isLearned ? 'Qayta Yangilash' : "⚡ Modelga O'qitish"}</span>
                     </button>
 
+                    {/* O'chirish */}
                     <button
                       onClick={() => handleDelete(doc.id)}
                       disabled={isSyncing}
@@ -237,6 +349,80 @@ export const AdminDocuments: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Document Content Preview Modal */}
+      {previewModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-gray-100 dark:border-slate-800 overflow-hidden">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                    {previewLoading ? "Hujjat yuklanmoqda..." : previewDoc?.title}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                    <span>{previewDoc?.department_name}</span>
+                    <span>•</span>
+                    <span>Fayl: {previewDoc?.filename}</span>
+                    <span>•</span>
+                    <span>{Math.round((previewDoc?.file_size || 0) / 1024)} KB</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setPreviewModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body / Content */}
+            <div className="p-6 overflow-y-auto flex-1 text-sm text-gray-800 dark:text-slate-200 leading-relaxed font-sans whitespace-pre-wrap select-text bg-slate-50/50 dark:bg-slate-950/50">
+              {previewLoading ? (
+                <div className="py-16 text-center text-gray-400 dark:text-slate-500 flex flex-col items-center gap-3">
+                  <RefreshCw className="w-8 h-8 animate-spin text-indigo-600" />
+                  <span>Hujjat matni va bo'laklari yuklanmoqda...</span>
+                </div>
+              ) : (
+                previewDoc?.content || "Hujjat matni topilmadi."
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
+              <span className="text-xs text-gray-400 dark:text-slate-500">
+                AI Bo'laklar soni: <b>{previewDoc?.chunks_count || 0} ta qism</b>
+              </span>
+
+              <div className="flex items-center gap-2">
+                {previewDoc?.id && (
+                  <a
+                    href={documentService.getFileUrl(previewDoc.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold rounded-xl transition"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Asl faylni yuklab olish</span>
+                  </a>
+                )}
+                <button
+                  onClick={() => setPreviewModalOpen(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl transition"
+                >
+                  Yopish
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Upload Modal */}
       {uploadModalOpen && (
@@ -304,7 +490,7 @@ export const AdminDocuments: React.FC = () => {
                 />
               </div>
 
-              {/* Auto Learn Checkbox */}
+              {/* Incremental RAG Notice & Auto Learn Checkbox */}
               <label className="flex items-start gap-2.5 p-3 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 cursor-pointer select-none">
                 <input
                   type="checkbox"
@@ -318,7 +504,7 @@ export const AdminDocuments: React.FC = () => {
                     Yuklangandan so'ng darhol AI modeliga o'qitilsin va test savollari tuzilsin
                   </span>
                   <span className="text-indigo-700/80 dark:text-indigo-300/80 text-[11px] mt-0.5 block">
-                    Tavsiya etiladi: Xodimlar darhol test topshirishi uchun savollar avtomatik shakllanadi (15-20 soniya).
+                    ⚡ <b>Inkremental o'rganish:</b> Yangi hujjat bo'limning mavjud hujjatlari va savollariga qo'shiladi, eski savollar o'chirilmaydi (token tejaladi).
                   </span>
                 </div>
               </label>

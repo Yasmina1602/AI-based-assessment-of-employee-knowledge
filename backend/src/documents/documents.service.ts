@@ -43,6 +43,43 @@ export class DocumentsService {
     return res.rows[0];
   }
 
+  async getDocumentContent(id: number) {
+    const doc = await this.findOne(id);
+
+    // 1. Try to read chunks from document_chunks
+    const chunksRes = await this.db.query(
+      `SELECT chunk_index, content FROM document_chunks WHERE document_id = $1 ORDER BY chunk_index ASC`,
+      [id]
+    );
+
+    let content = '';
+    if (chunksRes.rows && chunksRes.rows.length > 0) {
+      content = chunksRes.rows.map((r: any) => r.content).join('\n\n--- [Bo\'lak / Qism] ---\n\n');
+    } else if (fs.existsSync(doc.file_path)) {
+      if (doc.filename.toLowerCase().endsWith('.txt')) {
+        content = fs.readFileSync(doc.file_path, 'utf-8');
+      } else {
+        content = `Ushbu hujjat (${doc.filename}) saqlangan. Hujjat to'liq o'rganilgandan so'ng uning matn qismlari avtomatik shu yerda ko'rinadi. Asl faylni 'Yuklab olish' tugmasi orqali ochishingiz mumkin.`;
+      }
+    } else {
+      content = 'Fayl server diskida topilmadi.';
+    }
+
+    return {
+      id: doc.id,
+      title: doc.title,
+      filename: doc.filename,
+      file_size: doc.file_size,
+      mime_type: doc.mime_type,
+      status: doc.status,
+      chunks_count: doc.chunks_count,
+      department_id: doc.department_id,
+      department_name: doc.department_name,
+      created_at: doc.created_at,
+      content,
+    };
+  }
+
   async create(file: Express.Multer.File, departmentId: number, title?: string) {
     if (!file) {
       throw new BadRequestException('Fayl yuklanmadi');
@@ -103,6 +140,9 @@ export class DocumentsService {
         "UPDATE documents SET status = 'learned', chunks_count = $1 WHERE id = $2",
         [total_chunks, id]
       );
+
+      // Clear previous questions for this specific document before inserting fresh ones (safe re-sync)
+      await this.db.query('DELETE FROM questions WHERE document_id = $1', [id]);
 
       // Save generated questions to questions bank if available
       let savedQuestionsCount = 0;

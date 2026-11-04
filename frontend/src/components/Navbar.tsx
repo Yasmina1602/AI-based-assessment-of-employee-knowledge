@@ -131,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
                   <span className="hidden sm:inline">Natijalar</span>
                 </button>
 
-                {/* SUPERADMIN ONLY TAB: Adminlarni boshqarish */}
+                {/* SUPERADMIN ONLY TAB: Adminlar va Xodimlarni boshqarish */}
                 {isSuperAdmin && (
                   <button
                     onClick={() => setCurrentTab('admins')}
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab, user 
                     }`}
                   >
                     <ShieldCheck className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                    <span>Adminlar</span>
+                    <span>Adminlar & Xodimlar</span>
                   </button>
                 )}
               </>

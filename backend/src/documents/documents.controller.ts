@@ -1,6 +1,6 @@
 import { 
   Controller, Get, Post, Delete, Param, ParseIntPipe, 
-  UseGuards, UseInterceptors, UploadedFile, Body, Query 
+  UseGuards, UseInterceptors, UploadedFile, Body, Query, Res, NotFoundException 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -44,6 +44,20 @@ export class DocumentsController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.documentsService.findOne(id);
+  }
+
+  @Get(':id/content')
+  getContent(@Param('id', ParseIntPipe) id: number) {
+    return this.documentsService.getDocumentContent(id);
+  }
+
+  @Get(':id/file')
+  async downloadFile(@Param('id', ParseIntPipe) id: number, @Res() res: any) {
+    const doc = await this.documentsService.findOne(id);
+    if (!fs.existsSync(doc.file_path)) {
+      throw new NotFoundException('Fayl server diskida topilmadi');
+    }
+    return res.download(doc.file_path, doc.filename);
   }
 
   @Post('upload')

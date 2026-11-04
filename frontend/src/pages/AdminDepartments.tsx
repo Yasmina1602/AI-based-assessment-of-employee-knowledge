@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { departmentService, authService } from '../services/api';
 import { 
   Building2, Plus, Edit2, Trash2, Clock, 
-  HelpCircle, CheckCircle2, UserPlus, Users, X, Save 
+  HelpCircle, CheckCircle2, UserPlus, Users, X, Save, Eye, EyeOff 
 } from 'lucide-react';
 
 export const AdminDepartments: React.FC = () => {
@@ -32,6 +32,7 @@ export const AdminDepartments: React.FC = () => {
   const [empModalOpen, setEmpModalOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<any>(null);
   const [selectedDeptId, setSelectedDeptId] = useState<number | null>(null);
+  const [showEmpPassword, setShowEmpPassword] = useState(false);
   const [empFormData, setEmpFormData] = useState({
     username: '',
     password: '',
@@ -129,6 +130,7 @@ export const AdminDepartments: React.FC = () => {
   const handleOpenAddEmployee = (deptId: number) => {
     setEditingEmployee(null);
     setSelectedDeptId(deptId);
+    setShowEmpPassword(false);
     setEmpFormData({
       username: '',
       password: '',
@@ -140,6 +142,7 @@ export const AdminDepartments: React.FC = () => {
   const handleOpenEditEmployee = (emp: any) => {
     setEditingEmployee(emp);
     setSelectedDeptId(emp.department_id);
+    setShowEmpPassword(false);
     setEmpFormData({
       username: emp.username,
       password: '',
@@ -601,14 +604,24 @@ export const AdminDepartments: React.FC = () => {
                 <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
                   {editingEmployee ? "Yangi Parol (Ixtiyoriy)" : "Parol *"}
                 </label>
-                <input
-                  type="password"
-                  required={!editingEmployee}
-                  value={empFormData.password}
-                  onChange={(e) => setEmpFormData({ ...empFormData, password: e.target.value })}
-                  placeholder={editingEmployee ? "O'zgartirmaslik uchun bo'sh qoldiring" : "••••••••"}
-                  className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type={showEmpPassword ? "text" : "password"}
+                    required={!editingEmployee}
+                    value={empFormData.password}
+                    onChange={(e) => setEmpFormData({ ...empFormData, password: e.target.value })}
+                    placeholder={editingEmployee ? "O'zgartirmaslik uchun bo'sh qoldiring" : "••••••••"}
+                    className="w-full pl-3.5 pr-11 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm outline-none text-gray-900 dark:text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowEmpPassword(!showEmpPassword)}
+                    title={showEmpPassword ? "Parolni yashirish" : "Parolni ko'rsatish"}
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  >
+                    {showEmpPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               <div>

@@ -110,6 +110,11 @@ export const documentService = {
     const res = await api.get(url);
     return res.data;
   },
+  getContent: async (id: number) => {
+    const res = await api.get(`/documents/${id}/content`);
+    return res.data;
+  },
+  getFileUrl: (id: number) => `/api/documents/${id}/file`,
   upload: async (file: File, departmentId: number, title?: string) => {
     const formData = new FormData();
     formData.append('file', file);
