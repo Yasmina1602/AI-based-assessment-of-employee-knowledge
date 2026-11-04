@@ -19,13 +19,19 @@ $pyExe = if (Test-Path "$ScriptDir\ai-service\.venv\Scripts\python.exe") {
 Start-Process cmd.exe -ArgumentList "/k", "cd /d `"$ScriptDir\ai-service`" && `"$pyExe`" run.py"
 
 Write-Host "[3/4] NestJS Backendni ishga tushirish (port: 4000)..." -ForegroundColor Green
-Start-Process cmd.exe -ArgumentList "/k", "cd /d `"$ScriptDir\backend`" && npm start"
+Start-Process cmd.exe -ArgumentList "/k", "cd /d `"$ScriptDir\backend`" && if exist dist\main.js (node dist\main.js) else (npm start)"
 
 Write-Host "[4/4] React Frontendni ishga tushirish (port: 3000)..." -ForegroundColor Green
 Start-Process cmd.exe -ArgumentList "/k", "cd /d `"$ScriptDir\frontend`" && npm run dev"
 
-Write-Host "`nServislar ishga tushmoqda, 5 soniya kutilmoqda..." -ForegroundColor Yellow
-Start-Sleep -Seconds 5
+Write-Host "`nServislar to'liq tayyor bo'lishi kutilmoqda (port: 4000 va 3000)..." -ForegroundColor Yellow
+for ($i = 0; $i -lt 40; $i++) {
+    $p4000 = Get-NetTCPConnection -LocalPort 4000 -State Listen -ErrorAction SilentlyContinue
+    $p3000 = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue
+    if ($p4000 -and $p3000) { break }
+    Start-Sleep -Milliseconds 500
+}
+Start-Sleep -Seconds 1
 
 Write-Host "Brauzerda ochilmoqda: http://localhost:3000" -ForegroundColor Cyan
 Start-Process "http://localhost:3000"
@@ -35,9 +41,4 @@ Write-Host "  Barcha 3 ta servis muvaffaqiyatli ishga tushirildi!" -ForegroundCo
 Write-Host "  - Frontend: http://localhost:3000"
 Write-Host "  - Backend:  http://localhost:4000"
 Write-Host "  - AI RAG:   http://localhost:8001"
-Write-Host "`n  Standart hisoblar:"
-Write-Host "  - Super Admin: superadmin / admin123"
-Write-Host "  - HR Admin:    admin      / admin123"
-Write-Host "  - Xodim:       xodim      / xodim123"
 Write-Host "======================================================================" -ForegroundColor Cyan
-
