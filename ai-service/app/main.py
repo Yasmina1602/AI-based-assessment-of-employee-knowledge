@@ -52,8 +52,8 @@ class EvaluateRequest(BaseModel):
 class GenerateQuestionsRequest(BaseModel):
     document_text: str
     department_name: str
-    closed_count: int = 10
-    open_count: int = 3
+    closed_count: int = 25
+    open_count: int = 5
     level: str = "Middle"
 
 @app.get("/health")
@@ -70,6 +70,8 @@ async def process_document(
     document_id: int = Form(...),
     department_id: int = Form(...),
     department_name: str = Form("Umumiy"),
+    closed_count: int = Form(25),
+    open_count: int = Form(5),
     file: UploadFile = File(...)
 ):
     """
@@ -127,12 +129,12 @@ async def process_document(
         # 3. Save chunks into DB
         await save_chunks(document_id, department_id, chunks_with_embeddings)
 
-        # 4. Generate initial questions from document
+        # 4. Generate initial questions from document (30 questions: 25 closed + 5 open)
         generated_questions = await question_generator.generate_questions_from_document(
             document_text=extracted_text,
             department_name=department_name,
-            closed_count=10,
-            open_count=3,
+            closed_count=closed_count,
+            open_count=open_count,
             level="Middle"
         )
 

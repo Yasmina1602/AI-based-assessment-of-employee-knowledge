@@ -61,7 +61,7 @@ export const AdminDocuments: React.FC = () => {
     try {
       setSyncingId(id);
       const res = await documentService.sync(id);
-      const count = res.generated_questions_count || res.data?.generated_questions_count || 13;
+      const count = res.generated_questions_count || res.data?.generated_questions_count || 30;
       alert(`Muvaffaqiyatli! Hujjat AI tomonidan o'rganildi va ${count} ta yangi test savollari shakllantirildi!`);
       loadData();
     } catch (err: any) {
@@ -107,10 +107,10 @@ export const AdminDocuments: React.FC = () => {
       const newDoc = await documentService.upload(uploadFile, Number(uploadDeptId), uploadTitle);
 
       if (autoLearn && newDoc?.id) {
-        setUploadStatusText("AI model hujjatni o'qimoqda va yangi test savollarini tuzmoqda (15-20 soniya)...");
+        setUploadStatusText("AI model hujjatni o'qimoqda va yangi 30 ta test savollarini tuzmoqda (20-30 soniya)...");
         try {
           const syncRes = await documentService.sync(newDoc.id);
-          const count = syncRes.generated_questions_count || 13;
+          const count = syncRes.generated_questions_count || 30;
           alert(`Muvaffaqiyatli! Yangi hujjat yuklandi va AI modeliga o'qitildi. ${count} ta yangi test savollari bo'lim savollar bankiga qo'shildi!`);
         } catch (syncErr: any) {
           alert("Hujjat yuklandi, ammo AI modeliga o'qitishda xatolik yuz berdi. Ro'yxatdagi 'Yangilash' tugmasini bosing.");

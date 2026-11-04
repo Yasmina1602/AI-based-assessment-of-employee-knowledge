@@ -11,7 +11,7 @@ BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 class GeminiClient:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or settings.GEMINI_API_KEY
-        self.timeout = httpx.Timeout(45.0, connect=10.0)
+        self.timeout = httpx.Timeout(120.0, connect=15.0)
 
     async def get_embedding(self, text: str) -> List[float]:
         """
@@ -53,7 +53,7 @@ class GeminiClient:
         contents = [{"parts": [{"text": prompt}]}]
         generation_config = {
             "temperature": temperature,
-            "maxOutputTokens": 4096
+            "maxOutputTokens": 8192
         }
         if json_output:
             generation_config["responseMimeType"] = "application/json"

@@ -122,15 +122,17 @@ export class DocumentsService {
       form.append('document_id', String(doc.id));
       form.append('department_id', String(doc.department_id));
       form.append('department_name', doc.department_name || 'Umumiy');
+      form.append('closed_count', '25');
+      form.append('open_count', '5');
       form.append('file', fs.createReadStream(doc.file_path), {
         filename: doc.filename,
         contentType: doc.mime_type || 'application/octet-stream',
       });
 
-      this.logger.log(`Sending document ${id} to AI microservice for processing...`);
+      this.logger.log(`Sending document ${id} to AI microservice for processing (generating 30 questions: 25 closed + 5 open)...`);
       const aiRes = await axios.post(`${this.aiServiceUrl}/api/documents/process`, form, {
         headers: form.getHeaders(),
-        timeout: 120000, // 2 minutes for large docs
+        timeout: 180000, // 3 minutes for 30 questions + embeddings
       });
 
       const { total_chunks, generated_questions } = aiRes.data;
