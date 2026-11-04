@@ -14,6 +14,7 @@ Tizim xodimlar bilimini shunchaki quruq test orqali emas, balki real vaziyatli a
 ---
 
 ## 📑 Mundarija
+- [📸 Tizim Interfeysi va Skrinshotlar (Screenshots)](#-tizim-interfeysi-va-skrinshotlar-screenshots)
 - [📌 Loyihaning Asosiy Imkoniyatlari](#-loyihaning-asosiy-imkoniyatlari)
 - [🏗 Tizim Arxitekturasi](#-tizim-arxitekturasi)
 - [🗄 Ma'lumotlar Bazasi (PostgreSQL) va Rollar](#-malumotlar-bazasi-postgresql-va-rollar)
@@ -27,6 +28,74 @@ Tizim xodimlar bilimini shunchaki quruq test orqali emas, balki real vaziyatli a
   - [3-usul: Docker orqali Ishga Tushirish](#3-usul-docker-orqali-ishga-tushirish-docker-compose)
 - [📁 Kataloglar Tuzilishi](#-kataloglar-tuzilishi)
 - [🔌 Asosiy API Endpointlar](#-asosiy-api-endpointlar)
+
+---
+
+## 📸 Tizim Interfeysi va Skrinshotlar (Screenshots)
+
+Quyida **Xodim Reyting AI** platformasining asosiy sahifalari, imkoniyatlari va ishlash jarayonlari keltirilgan:
+
+### 1. Superadmin Paneli — Administratorlar va Xodimlarni Boshqarish
+> **Fayl:** `image/superadmin_huquqlar_paneli.png`  
+> **Tavsif:** Superadministratorning maxsus boshqaruv oynasi. Bu yerda tizimdagi barcha HR administratorlar va xodimlar ro'yxati, ularning rollari va loginlari aks etgan. Yangi admin qo'shish, xodimlar ma'lumotlarini o'zgartirish hamda parollarni **ko'zcha belgisi** orqali ko'rish va yangilash imkoniyati mavjud.
+
+![Superadmin Huquqlar Paneli](image/superadmin_huquqlar_paneli.png)
+
+---
+
+### 2. HR Admin Dashboard — Umumiy Monitoring va Tahlil
+> **Fayl:** `image/admin_dashboard.png`  
+> **Tavsif:** Korxona HR ma'muriyatining asosiy boshqaruv paneli. Tizimdagi jami xodimlar, attestatsiyadan muvaffaqiyatli o'tganlar, o'rtacha ball, o'tkazilgan test sessiyalari soni va eng so'nggi topshirilgan sinovlar tahlili real vaqt rejimida grafik va ko'rsatkichlar bilan ko'rsatiladi.
+
+![Admin Dashboard](image/admin_dashboard.png)
+
+---
+
+### 3. Korxona Bo'limlari va Test Parametrlarini Sozlash
+> **Fayl:** `image/korxona_bolimlari.png`  
+> **Tavsif:** Korxonaning har bir bo'limi (Buxgalteriya, IT, Davlat xizmatlari va h.k.) uchun alohida reglamentlar va test mezonlari belgilanadi. Masalan: test vaqti (`30` daqiqa), yopiq savollar soni (`25` ta), ochiq savollar soni (`5` ta), o'tish bali (`60`%) va bo'limga xodimlarni biriktirish oynasi.
+
+![Korxona Bo'limlari](image/korxona_bolimlari.png)
+
+---
+
+### 4. Savollar Banki — AI Tomonidan Yaratilgan 30 ta Savol
+> **Fayl:** `image/savollar_sahifasi.png`  
+> **Tavsif:** Ichki reglament hujjati yuklanib modelga o'qitilgach, AI avtomatik tuzgan **30 ta savollar** ro'yxati. HR admin har bir savolni, uning 4 ta variantini, to'g'ri javobini va hujjatdan keltirilgan izohini tekshirishi, tasdiqlashi (`Tasdiqlangan`), tahrirlashi yoki o'chirishi mumkin.
+
+![Savollar Banki](image/savollar_sahifasi.png)
+
+---
+
+### 5. Xodimning Test Topshirish Interfeysi (Tungi Rejim va Taymer)
+> **Fayl:** `image/testni_boshlash.png`  
+> **Tavsif:** Xodim uchun qulay va zamonaviy test topshirish oynasi (Dark Mode). Yuqori qismida server nazoratidagi taymer, 30 ta savol bo'ylab tezkor o'tish paneli, yopiq savollar (A, B, C, D) va amaliy vaziyatli ochiq savollarga erkin matnli javob yozish maydoni.
+
+![Test Topshirish Oynasi](image/testni_boshlash.png)
+
+---
+
+### 6. Test Natijalari va AI Baholash Tahlili
+> **Fayl:** `image/test_natijalari_1.png`  
+> **Tavsif:** Test yakunlangandan so'ng xodimga ko'rsatiladigan to'liq tahliliy hisobot: to'plangan umumiy ball, foiz ko'rsatkichi, xodimning bo'limdagi **O'rni (1-o'rin, 2-o'rin...)**, to'g'ri/noto'g'ri yopiq javoblar hamda Google Gemini AI tomonidan har bir ochiq javobga qo'yilgan ball, namunaviy to'g'ri javob va tavsiyalar.
+
+![Test Natijalari Tahlili](image/test_natijalari_1.png)
+
+---
+
+### 7. Qoidabuzarliklar (Anti-Cheat) Monitoring Jurnali
+> **Fayl:** `image/test_natijalari_2.png`  
+> **Tavsif:** Test topshirish jarayonida xodim tomonidan sodir etilgan barcha qoidabuzarliklar (boshqa tabga yoki dasturga o'tish, devtools ochish, nusxalashga urinish) soniyalarigacha aniqlikda qayd etiladi va natijalar sahifasida maxsus ro'yxat bilan ko'rsatiladi.
+
+![Qoidabuzarliklar Jurnali](image/test_natijalari_2.png)
+
+---
+
+### 8. Xodimlar Korporativ Reytingi (Leaderboard)
+> **Fayl:** `image/xodim_reyting.png`  
+> **Tavsif:** Barcha bo'limlar yoki har bir alohida bo'lim xodimlarining erishgan natijalari asosidagi adolatli korporativ reyting jadvali. Xodimlarga mavhum "daraja" emas, balki real to'plagan bali, o'tgan foizi va vaqti bo'yicha **1-o'rin, 2-o'rin, 3-o'rin...** beriladi.
+
+![Xodimlar Reytingi](image/xodim_reyting.png)
 
 ---
 
@@ -348,6 +417,7 @@ xodim_bilimini_baholash_test/
 │   │   └── main.tsx
 │   └── vite.config.ts
 │
+├── image/                        # GitHub va hujjatlar uchun rasmlar va skrinshotlar
 ├── uploads/                      # Yuklangan PDF va DOCX reglamentlar
 ├── start_all.bat                 # Windows uchun 1-klikda ishga tushirish skripti
 ├── start_all.ps1                 # PowerShell skripti
