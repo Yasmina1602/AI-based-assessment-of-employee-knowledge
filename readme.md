@@ -67,15 +67,31 @@ Quyida **Xodim Reyting AI** platformasining asosiy sahifalari, imkoniyatlari va 
 
 ---
 
-### 5. Xodimning Test Topshirish Interfeysi (Tungi Rejim va Taymer)
+### 5. Xodimning Testni Boshlash Oynasi
 > **Fayl:** `image/testni_boshlash.png`  
-> **Tavsif:** Xodim uchun qulay va zamonaviy test topshirish oynasi (Dark Mode). Yuqori qismida server nazoratidagi taymer, 30 ta savol bo'ylab tezkor o'tish paneli, yopiq savollar (A, B, C, D) va amaliy vaziyatli ochiq savollarga erkin matnli javob yozish maydoni.
+> **Tavsif:** Xodim uchun qulay va zamonaviy test topshirish oynasi. Bo'lim tanlanishi, test qoidalari, ajratilgan vaqt va savollar soni ko'rsatilgan kirish ekrani.
 
-![Test Topshirish Oynasi](image/testni_boshlash.png)
+![Testni Boshlash Oynasi](image/testni_boshlash.png)
 
 ---
 
-### 6. Test Natijalari va AI Baholash Tahlili
+### 6. Test Ishlash Jarayoni (Yopiq va Ochiq Savollar)
+> **Fayl:** `image/test_ishlash.png`  
+> **Tavsif:** Test topshirish jarayoni (Tungi rejim). Yuqorida server nazoratidagi taymer, 30 ta savollar xaritasi, yopiq savol variantlari hamda amaliy vaziyatli ochiq savollarga erkin matnli javob yozish maydoni.
+
+![Test Ishlash Jarayoni](image/test_ishlash.png)
+
+---
+
+### 7. Qoidabuzarlik Aniqlanganda Ekranga Chiquvchi Ogohlantirish
+> **Fayl:** `image/qoidabuzarlik_ogohlantirish.png`  
+> **Tavsif:** Xodim test topshirish paytida boshqa tabga yoki dasturga o'tganda (yoki nusxalashga uringanda) ekranda darhol paydo bo'luvchi qat'iy ogohlantirish modal oynasi ("Qoidabuzarlik qayd etildi! 3-ogohlantirishda test avtomatik bekor qilinadi").
+
+![Qoidabuzarlik Ogohlantirish Oynasi](image/qoidabuzarlik_ogohlantirish.png)
+
+---
+
+### 8. Test Natijalari va AI Baholash Tahlili
 > **Fayl:** `image/test_natijalari_1.png`  
 > **Tavsif:** Test yakunlangandan so'ng xodimga ko'rsatiladigan to'liq tahliliy hisobot: to'plangan umumiy ball, foiz ko'rsatkichi, xodimning bo'limdagi **O'rni (1-o'rin, 2-o'rin...)**, to'g'ri/noto'g'ri yopiq javoblar hamda Google Gemini AI tomonidan har bir ochiq javobga qo'yilgan ball, namunaviy to'g'ri javob va tavsiyalar.
 
@@ -83,7 +99,7 @@ Quyida **Xodim Reyting AI** platformasining asosiy sahifalari, imkoniyatlari va 
 
 ---
 
-### 7. Qoidabuzarliklar (Anti-Cheat) Monitoring Jurnali
+### 9. Qoidabuzarliklar (Anti-Cheat) Monitoring Jurnali
 > **Fayl:** `image/test_natijalari_2.png`  
 > **Tavsif:** Test topshirish jarayonida xodim tomonidan sodir etilgan barcha qoidabuzarliklar (boshqa tabga yoki dasturga o'tish, devtools ochish, nusxalashga urinish) soniyalarigacha aniqlikda qayd etiladi va natijalar sahifasida maxsus ro'yxat bilan ko'rsatiladi.
 
@@ -91,7 +107,7 @@ Quyida **Xodim Reyting AI** platformasining asosiy sahifalari, imkoniyatlari va 
 
 ---
 
-### 8. Xodimlar Korporativ Reytingi (Leaderboard)
+### 10. Xodimlar Korporativ Reytingi (Leaderboard)
 > **Fayl:** `image/xodim_reyting.png`  
 > **Tavsif:** Barcha bo'limlar yoki har bir alohida bo'lim xodimlarining erishgan natijalari asosidagi adolatli korporativ reyting jadvali. Xodimlarga mavhum "daraja" emas, balki real to'plagan bali, o'tgan foizi va vaqti bo'yicha **1-o'rin, 2-o'rin, 3-o'rin...** beriladi.
 
