@@ -145,6 +145,8 @@ Quyida **Xodim Reyting AI** platformasining asosiy sahifalari, imkoniyatlari va 
 
 Platforma 3 ta mustaqil mikroxizmatdan iborat:
 
+![Tizim Arxitekturasi](image/arxitektura.png)
+
 ```
 ┌────────────────────────────────────────────────────────┐
 │              React.js + TypeScript (SPA)               │
